@@ -1,76 +1,52 @@
 using System.Collections;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
-using static UnityEngine.ParticleSystem;
 
 public class MeshGenerater
 {
     public Mesh mesh;
     World world;
-    public List<Chunk> loadedChunks = new List<Chunk>();
-    public MeshGenerater(World world)
+    Queue<Chunk> neededChunks = new Queue<Chunk>();
+    List<Chunk> loadedChunks = new List<Chunk>();
+    Transform chunkLocation;
+    Transform player;
+    int loadingDistance;
+    TerrainGen parent;
+    public MeshGenerater(World world, Transform chunkLocation, Transform player, int loadingDistance, TerrainGen parent)
     {
         mesh = new Mesh();
         this.world = world;
+
+        this.chunkLocation = chunkLocation;
+        this.player = player;
+        this.loadingDistance = loadingDistance;
+        this.parent = parent;
     }
 
-    bool Changed(List<Chunk> newChunks)
+    public IEnumerator AddToQueue()
     {
-        if (loadedChunks.All(newChunks.Contains) && newChunks.All(loadedChunks.Contains))
+        while (true)
         {
-            return false;
-        }
-        else
-        {
-            loadedChunks = newChunks;
-            return true;
-        }
-    }
-
-    public Mesh GenerateMesh(List<Chunk> newChunks)
-    {
-        if (Changed(newChunks))
-        {
-            List<int> tris = new List<int>();
-            List<Vector3> points = new List<Vector3>();
-            foreach (var chunk in loadedChunks)
+            foreach (var item in world.CreateChunks(player.position))
             {
-                int start = points.Count;
-                points.AddRange(chunk.GetPoints());
-                for (int x = 0; x < 16; x++)
+                if (!loadedChunks.Contains(item))
                 {
-                    for (int y = 0; y < 16; y++)
-                    {
-                        int tile = x * 16 + y+start;
-                        if (x == 15 && y == 15)
-                        {
-
-                        }
-                        else if (x == 15)
-                        {
-
-                        }
-                        else if (y == 15)
-                        {
-
-                        }
-                        else
-                        {
-                            int[] newPoints = { tile, tile + 1, tile + 17, tile, tile + 17, tile + 16 };
-                            tris.AddRange(newPoints);
-                        }
-                    }
+                    neededChunks.Enqueue(item);
                 }
             }
-            mesh.vertices = points.ToArray();
-            mesh.triangles = tris.ToArray();
-            return mesh;
+            yield return null;
         }
-        else
+    }
+
+    public IEnumerator ClearQueue()
+    {
+        while (true)
         {
-            return null;
+            Chunk chunk = neededChunks.Dequeue();
+            parent.MakeChunk(chunk);
+            loadedChunks.Add(chunk);
+            yield return null;
         }
     }
 }

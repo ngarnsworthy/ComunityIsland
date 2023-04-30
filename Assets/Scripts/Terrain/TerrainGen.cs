@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof (MeshFilter))]
+[RequireComponent(typeof(MeshFilter))]
 public class TerrainGen : MonoBehaviour
 {
     public Transform player;
@@ -10,28 +9,26 @@ public class TerrainGen : MonoBehaviour
     World world;
     MeshGenerater meshGenerater;
     MeshFilter meshFilter;
+    public Transform chunkLocation;
+    public GameObject chunkGameObject;
+
+
     // Start is called before the first frame update
     void Start()
     {
         NoiseS3D.seed = seed;
         world = new World();
-        meshGenerater = new MeshGenerater(world);
+        meshGenerater = new MeshGenerater(world, chunkLocation, player, 5, this);
         world.loadingDistance = 10;
         meshFilter = GetComponent<MeshFilter>();
-        StartCoroutine(LoadChunks());
+        StartCoroutine(meshGenerater.AddToQueue());
+        StartCoroutine(meshGenerater.ClearQueue());
     }
 
-    IEnumerator LoadChunks()
+    public void MakeChunk(Chunk chunk)
     {
-        while (true)
-        {
-            yield return new WaitForEndOfFrame();
-            Mesh newMesh = meshGenerater.GenerateMesh(world.CreateChunks(player.position));
-            if (newMesh != null)
-            {
-                meshFilter.mesh = newMesh;
-                Debug.Log("Mesh Updated");
-            }
-        }
+        GameObject gameObject = Instantiate(chunkGameObject, chunkLocation);
+        gameObject.GetComponent<MeshFilter>().mesh = chunk.GenerateMesh();
+        gameObject.GetComponent<ChunkControler>().location = chunk.worldLocation;
     }
 }
