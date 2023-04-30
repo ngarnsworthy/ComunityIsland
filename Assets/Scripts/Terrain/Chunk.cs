@@ -14,50 +14,103 @@ using UnityEngine;
 
 public class Chunk
 {
-    public float[][] points;
+    World world;
+    public float[,] points;
     public Vector2Int worldLocation;
-    public Chunk north;
-    public Chunk east;
-    public Chunk south;
-    public Chunk west;
-
-    public Chunk(Chunk north = null, Chunk east = null, Chunk south = null, Chunk west = null)
+    public Chunk north
     {
-        this.north = north;
-        this.east = east;
-        this.south = south;
-        this.west = west;
-        if (north!=null)
+        get
         {
-            north.south = this;
+            //Location of the chunk
+            Vector2Int chunkLocation = new Vector2Int(worldLocation.x, worldLocation.y+1);
+            //Check if the chunk exists
+            if (world.chunks.ContainsKey(chunkLocation))
+            {
+                return world.chunks[chunkLocation];
+            }
+            else
+            {
+                return null;
+            }
         }
-        if (east != null)
+    }
+    public Chunk east
+    {
+        get
         {
-            east.west = this;
+            //Location of the chunk
+            Vector2Int chunkLocation = new Vector2Int(worldLocation.x + 1, worldLocation.y);
+            //Check if the chunk exists
+            if (world.chunks.ContainsKey(chunkLocation))
+            {
+                return world.chunks[chunkLocation];
+            }
+            else
+            {
+                return null;
+            }
         }
-        if (south != null)
+    }
+    public Chunk south
+    {
+        get
         {
-            south.north = this;
+            //Location of the chunk
+            Vector2Int chunkLocation = new Vector2Int(worldLocation.x, worldLocation.y-1);
+            //Check if the chunk exists
+            if (world.chunks.ContainsKey(chunkLocation))
+            {
+                return world.chunks[chunkLocation];
+            }
+            else
+            {
+                return null;
+            }
         }
-        if (west != null)
+    }
+    public Chunk west
+    {
+        get
         {
-            west.east = this;
+            //Location of the chunk
+            Vector2Int chunkLocation = new Vector2Int(worldLocation.x - 1, worldLocation.y);
+            //Check if the chunk exists
+            if (world.chunks.ContainsKey(chunkLocation))
+            {
+                return world.chunks[chunkLocation];
+            }
+            else
+            {
+                return null;
+            }
         }
-        Vector2[] locations = new Vector2[16*16];
+    }
+
+    public Chunk(Vector2Int location, World world)
+    {
+        this.world = world;
+        worldLocation = location;
+
+        points = new float[16,16];
         for (int x = 0; x < 16; x++)
         {
             for (int y = 0; y < 16; y++)
             {
-                locations[x * 16 + y] = new Vector2(16 * worldLocation.x + x, 16 * worldLocation.y + y);
+                points[x,y] = (float)NoiseS3D.Noise(x,y);
             }
         }
-        float[] newPoints = NoiseS3D.NoiseArrayGPU(locations);
+    }
+
+    public Vector3[] GetPoints()
+    {
+        Vector3[] returnPoints = new Vector3[16 * 16];
         for (int x = 0; x < 16; x++)
         {
             for (int y = 0; y < 16; y++)
             {
-                points[x][y] = newPoints[x * 16 + y];
+                returnPoints[x * 16 + y] = new Vector3(worldLocation.x*16+x,points[x,y],worldLocation.y*16+y);
             }
         }
+        return returnPoints;
     }
 }

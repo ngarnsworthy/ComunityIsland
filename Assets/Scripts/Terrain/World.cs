@@ -5,30 +5,28 @@ using UnityEngine;
 public class World
 {
     public int loadingDistance;
-    Dictionary<int, Dictionary<int, Chunk>> chunks = new Dictionary<int, Dictionary<int, Chunk>>();
+    public Dictionary<Vector2Int, Chunk> chunks = new Dictionary<Vector2Int, Chunk>();
 
     public World()
     {
-        chunks.Add(0, new Dictionary<int, Chunk>());
-        chunks[0].Add(0, new Chunk());
+        chunks.Add(new Vector2Int(0,0), new Chunk(new Vector2Int(0, 0), this));
     }
 
-    public void CreateChunks(Vector3 playerLocation)
+    public List<Chunk> CreateChunks(Vector3 playerLocation)
     {
+        List<Chunk> loadedChunks = new List<Chunk>();
         Vector2Int playerChunk = new Vector2Int((int)(playerLocation.x / 16), (int)(playerLocation.y / 16));
         for (int x = playerChunk.x-loadingDistance; x < playerChunk.x+loadingDistance; x++)
         {
-            if (chunks[x] == null)
-            {
-                chunks.Add(x, new Dictionary<int, Chunk>());
-            }
             for (int y = playerChunk.y-loadingDistance; y < playerChunk.y+loadingDistance; y++)
             {
-                if (chunks[x][y] == null)
+                if (!chunks.ContainsKey(new Vector2Int(x,y)))
                 {
-                    chunks[x].Add(y, new Chunk(chunks[x][y + 1], chunks[x + 1][y], chunks[x][y - 1], chunks[x - 1][y]));
+                    chunks.Add(new Vector2Int(x, y), new Chunk(new Vector2Int(x,y), this));
                 }
+                loadedChunks.Add(chunks[new Vector2Int(x, y)]);
             }
         }
+        return loadedChunks;
     }
 }
