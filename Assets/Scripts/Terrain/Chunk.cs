@@ -16,6 +16,7 @@ public class Chunk
     World world;
     public float[,] points;
     public Vector2Int worldLocation;
+    public GameObject gameObject;
     public Chunk north
     {
         get
@@ -85,29 +86,29 @@ public class Chunk
         }
     }
 
-    public Chunk(Vector2Int location, World world)
+    public Chunk(Vector2Int location, World world, float scale)
     {
         this.world = world;
         worldLocation = location;
 
-        points = new float[16, 16];
-        for (int x = 0; x < 16; x++)
+        points = new float[17, 17];
+        for (int x = 0; x < 17; x++)
         {
-            for (int y = 0; y < 16; y++)
+            for (int y = 0; y < 17; y++)
             {
-                points[x, y] = (float)NoiseS3D.Noise(x, y);
+                points[x, y] = (float)NoiseS3D.Noise((x+worldLocation.x*16)*scale, (y+worldLocation.y*16)*scale);
             }
         }
     }
 
     public Vector3[] GetPoints()
     {
-        Vector3[] returnPoints = new Vector3[16 * 16];
-        for (int x = 0; x < 16; x++)
+        Vector3[] returnPoints = new Vector3[17 * 17];
+        for (int x = 0; x < 17; x++)
         {
-            for (int y = 0; y < 16; y++)
+            for (int y = 0; y < 17; y++)
             {
-                returnPoints[x * 16 + y] = new Vector3(worldLocation.x * 16 + x, points[x, y], worldLocation.y * 16 + y);
+                returnPoints[x * 17 + y] = new Vector3(worldLocation.x * 16 + x, points[x, y], worldLocation.y * 16 + y);
             }
         }
         return returnPoints;
@@ -119,26 +120,26 @@ public class Chunk
         List<Vector3> points = new List<Vector3>();
         int start = points.Count;
         points.AddRange(this.GetPoints());
-        for (int x = 0; x < 16; x++)
+        for (int x = 0; x < 17; x++)
         {
-            for (int y = 0; y < 16; y++)
+            for (int y = 0; y < 17; y++)
             {
-                int tile = x * 16 + y + start;
-                if (x == 15 && y == 15)
+                int tile = x * 17 + y + start;
+                if (x == 16 && y == 16)
                 {
                     if (north != null && north.east != null)
                     {
                         
                     }
                 }
-                else if (x == 15)
+                else if (x == 16)
                 {
                     if(east != null)
                     {
 
                     }
                 }
-                else if (y == 15)
+                else if (y == 16)
                 {
                     if(north != null)
                     {
@@ -147,7 +148,7 @@ public class Chunk
                 }
                 else
                 {
-                    int[] newPoints = { tile, tile + 1, tile + 17, tile, tile + 17, tile + 16 };
+                    int[] newPoints = { tile, tile + 1, tile + 18, tile, tile + 18, tile + 17 };
                     tris.AddRange(newPoints);
                 }
             }

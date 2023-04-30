@@ -11,24 +11,29 @@ public class TerrainGen : MonoBehaviour
     MeshFilter meshFilter;
     public Transform chunkLocation;
     public GameObject chunkGameObject;
-
+    public int loadingDistance;
+    public float scale;
 
     // Start is called before the first frame update
     void Start()
     {
         NoiseS3D.seed = seed;
-        world = new World();
-        meshGenerater = new MeshGenerater(world, chunkLocation, player, 5, this);
-        world.loadingDistance = 10;
+        world = new World(loadingDistance, scale);
+        meshGenerater = new MeshGenerater(world, chunkLocation, player, loadingDistance, this);
+        world.loadingDistance = loadingDistance;
         meshFilter = GetComponent<MeshFilter>();
         StartCoroutine(meshGenerater.AddToQueue());
         StartCoroutine(meshGenerater.ClearQueue());
     }
 
-    public void MakeChunk(Chunk chunk)
+    public GameObject MakeChunk(Chunk chunk)
     {
         GameObject gameObject = Instantiate(chunkGameObject, chunkLocation);
-        gameObject.GetComponent<MeshFilter>().mesh = chunk.GenerateMesh();
+        Mesh mesh = chunk.GenerateMesh();
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
         gameObject.GetComponent<ChunkControler>().location = chunk.worldLocation;
+        gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+        chunk.gameObject = gameObject;
+        return gameObject;
     }
 }

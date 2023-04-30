@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: 619e305f5165a9946b7f72464e44ca4a, type: 3}
   m_Sun: {fileID: 2114283754330233425}
-  m_IndirectSpecularColor: {r: 0.029152213, g: 0.064445764, b: 0.12695098, a: 1}
+  m_IndirectSpecularColor: {r: 0.029152099, g: 0.064445436, b: 0.1269502, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -644,6 +644,8 @@ MonoBehaviour:
   chunkLocation: {fileID: 1567002875}
   chunkGameObject: {fileID: 617884060107464942, guid: 789cce88bf95e5b49a6634139bb210d5,
     type: 3}
+  loadingDistance: 3
+  scale: 0.1
 --- !u!4 &1567002875
 Transform:
   m_ObjectHideFlags: 0

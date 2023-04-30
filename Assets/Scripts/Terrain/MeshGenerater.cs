@@ -28,7 +28,8 @@ public class MeshGenerater
     {
         while (true)
         {
-            foreach (var item in world.CreateChunks(player.position))
+            List<Chunk> chunks = world.CreateChunks(player.position);
+            foreach (var item in chunks)
             {
                 if (!loadedChunks.Contains(item))
                 {
@@ -43,9 +44,11 @@ public class MeshGenerater
     {
         while (true)
         {
-            Chunk chunk = neededChunks.Dequeue();
-            parent.MakeChunk(chunk);
-            loadedChunks.Add(chunk);
+            if (neededChunks.Count!=0) {
+                Chunk chunk = neededChunks.Dequeue();
+                parent.MakeChunk(chunk);
+                loadedChunks.Add(chunk);
+            }
             yield return null;
         }
     }
