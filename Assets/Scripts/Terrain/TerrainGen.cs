@@ -25,11 +25,12 @@ public class TerrainGen : MonoBehaviour
     {
         while (true)
         {
-            yield return null;
+            yield return new WaitForEndOfFrame();
             Mesh newMesh = meshGenerater.GenerateMesh(world.CreateChunks(player.position));
             if (newMesh != null)
             {
                 meshFilter.mesh = newMesh;
+                Debug.Log("Mesh Updated");
             }
         }
     }

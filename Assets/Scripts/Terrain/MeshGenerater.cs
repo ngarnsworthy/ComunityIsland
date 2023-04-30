@@ -2,6 +2,8 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
+using static UnityEngine.ParticleSystem;
 
 public class MeshGenerater
 {
@@ -16,7 +18,7 @@ public class MeshGenerater
 
     bool Changed(List<Chunk> newChunks)
     {
-        if (loadedChunks.SequenceEqual(newChunks))
+        if (loadedChunks.All(newChunks.Contains) && newChunks.All(loadedChunks.Contains))
         {
             return false;
         }
