@@ -31,7 +31,10 @@ public class TerrainGen : MonoBehaviour
         GameObject gameObject = Instantiate(chunkGameObject, chunkLocation);
         Mesh mesh = chunk.GenerateMesh();
         gameObject.GetComponent<MeshFilter>().mesh = mesh;
-        gameObject.GetComponent<ChunkControler>().location = chunk.worldLocation;
+        ChunkControler chunkControler = gameObject.GetComponent<ChunkControler>();
+        chunkControler.location = chunk.worldLocation;
+        chunkControler.world = world;
+        chunkControler.player = player;
         gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
         chunk.gameObject = gameObject;
         return gameObject;
