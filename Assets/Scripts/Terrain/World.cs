@@ -1,17 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class World
 {
+    public int seed;
+    public string name = "World";
     public float scale;
     public int loadingDistance;
-    public Dictionary<Vector2Int, Chunk> chunks = new Dictionary<Vector2Int, Chunk>();
+    public Dictionary<SerializableVector2Int, Chunk> chunks = new Dictionary<SerializableVector2Int, Chunk>();
 
-    public World(int loadingDistance, float scale)
+    public World(int loadingDistance, float scale, int seed)
     {
+        NoiseS3D.seed = seed;
         chunks.Add(new Vector2Int(0, 0), new Chunk(new Vector2Int(0, 0), this, scale));
         this.loadingDistance = loadingDistance;
         this.scale = scale;
+        this.seed = seed;
     }
 
     public List<Chunk> CreateChunks(Vector3 playerLocation)
@@ -30,5 +35,11 @@ public class World
             }
         }
         return loadedChunks;
+    }
+
+    public void Save()
+    {
+        SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath+"/"+name, this);
+        Debug.Log(Application.persistentDataPath + "/" + name);
     }
 }

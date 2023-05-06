@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,12 +12,13 @@ using UnityEngine;
 //    plains,
 //}
 
+[System.Serializable]
 public class Chunk
 {
     World world;
     public float[,] points;
-    public Vector2Int worldLocation;
-    public GameObject gameObject;
+    public SerializableVector2Int worldLocation;
+    [NonSerialized] public GameObject gameObject;
     public Chunk north
     {
         get
@@ -120,37 +122,13 @@ public class Chunk
         List<Vector3> points = new List<Vector3>();
         int start = points.Count;
         points.AddRange(this.GetPoints());
-        for (int x = 0; x < 17; x++)
+        for (int x = 0; x < 16; x++)
         {
-            for (int y = 0; y < 17; y++)
+            for (int y = 0; y < 16; y++)
             {
                 int tile = x * 17 + y + start;
-                if (x == 16 && y == 16)
-                {
-                    if (north != null && north.east != null)
-                    {
-                        
-                    }
-                }
-                else if (x == 16)
-                {
-                    if(east != null)
-                    {
-
-                    }
-                }
-                else if (y == 16)
-                {
-                    if(north != null)
-                    {
-
-                    }
-                }
-                else
-                {
-                    int[] newPoints = { tile, tile + 1, tile + 18, tile, tile + 18, tile + 17 };
-                    tris.AddRange(newPoints);
-                }
+                int[] newPoints = { tile, tile + 1, tile + 18, tile, tile + 18, tile + 17 };
+                tris.AddRange(newPoints);
             }
         }
         Mesh mesh = new Mesh();

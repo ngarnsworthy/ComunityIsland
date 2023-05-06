@@ -1,11 +1,12 @@
+using OpenCover.Framework.Model;
 using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 public class TerrainGen : MonoBehaviour
 {
+    public string worldName;
     public Transform player;
-    public int seed;
     World world;
     MeshGenerater meshGenerater;
     MeshFilter meshFilter;
@@ -17,8 +18,15 @@ public class TerrainGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NoiseS3D.seed = seed;
-        world = new World(loadingDistance, scale);
+        if (System.IO.File.Exists(Application.persistentDataPath + "/" + worldName))
+        {
+            world = SaveAsBinary.ReadFromBinaryFile<World>(Application.persistentDataPath + "/" + worldName);
+        }
+        else
+        {
+            world = new World(loadingDistance, scale, Random.seed);
+            world.name = worldName;
+        }
         meshGenerater = new MeshGenerater(world, chunkLocation, player, loadingDistance, this);
         world.loadingDistance = loadingDistance;
         meshFilter = GetComponent<MeshFilter>();
@@ -39,5 +47,10 @@ public class TerrainGen : MonoBehaviour
         gameObject.name = "Chunk "+chunk.worldLocation.ToString();
         chunk.gameObject = gameObject;
         return gameObject;
+    }
+
+    private void OnDestroy()
+    {
+        world.Save();
     }
 }
