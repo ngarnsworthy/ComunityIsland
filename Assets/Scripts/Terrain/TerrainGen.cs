@@ -36,6 +36,7 @@ public class TerrainGen : MonoBehaviour
         chunkControler.world = world;
         chunkControler.player = player;
         gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+        gameObject.name = "Chunk "+chunk.worldLocation.ToString();
         chunk.gameObject = gameObject;
         return gameObject;
     }

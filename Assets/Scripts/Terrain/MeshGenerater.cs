@@ -29,6 +29,17 @@ public class MeshGenerater
         while (true)
         {
             List<Chunk> chunks = world.CreateChunks(player.position);
+            for (int i = 0; i < chunkLocation.childCount; i++)
+            {
+                Transform item = chunkLocation.GetChild(i);
+                Chunk chunk = item.GetComponent<ChunkControler>().chunk;
+                if (!chunks.Contains(chunk))
+                {
+                    GameObject.Destroy(item.gameObject);
+                    chunk.gameObject = null;
+                    loadedChunks.Remove(chunk);
+                }
+            }
             foreach (var item in chunks)
             {
                 if (!loadedChunks.Contains(item))
@@ -36,7 +47,7 @@ public class MeshGenerater
                     neededChunks.Enqueue(item);
                 }
             }
-            yield return null;
+            yield return new WaitForEndOfFrame();
         }
     }
 
