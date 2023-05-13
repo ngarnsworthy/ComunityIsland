@@ -14,8 +14,4 @@ public class ChunkControler : MonoBehaviour
             return world.chunks[location];
         }
     }
-
-    private void Update()
-    {
-    }
 }

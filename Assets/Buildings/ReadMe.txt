@@ -1,0 +1,1 @@
+Add all buildings to buildings assetbundle

@@ -1,9 +1,12 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [System.Serializable]
 public class World
 {
+    [NonSerialized] public TerrainGen terrainGen; //Callback
     public int seed;
     public string name = "World";
     public float scale;

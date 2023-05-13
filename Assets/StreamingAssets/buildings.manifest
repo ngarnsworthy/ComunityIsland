@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 1381995957
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a5c99594e9b1025119e044a5f37b9f48
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2a5ec697d8d5a39ed41255b9740dc977
+HashAppended: 0
+ClassTypes:
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: b458810011052d44bad7b0447898e590, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: Building/Level
+Assets:
+- Assets/Buildings/House.asset
+Dependencies: []

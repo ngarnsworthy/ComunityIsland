@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 //public enum ChunkType
@@ -15,9 +16,44 @@ using UnityEngine;
 [System.Serializable]
 public class Chunk
 {
+    AssetBundle buildings;
     World world;
     public float[,] points;
     public SerializableVector2Int worldLocation;
+    public List<PlacedBuilding> placedBuildings;
+    [System.Serializable]
+    public class PlacedBuilding
+    {
+        [NonSerialized] private Building buildingPrivate;
+        public Building building
+        {
+            get { 
+                if(buildingPrivate == null)
+                {
+                    buildingPrivate = buildings.LoadAsset<Building>(buildingName);
+                }
+                return buildingPrivate; 
+            }
+            set { 
+                buildingPrivate = value; 
+                buildingName = value.name;
+            } 
+        }
+
+        public string buildingName;
+        public Vector2Int location;
+        public int level;
+        public float height;
+        AssetBundle buildings;
+
+        public PlacedBuilding(Building building,  Vector2Int location, float height, AssetBundle buildings)
+        {
+            this.buildings = buildings;
+            this.building = building;
+            this.location = location;
+            this.height = height;
+        }
+    }
     [NonSerialized] public GameObject gameObject;
     public Chunk north
     {
@@ -90,6 +126,7 @@ public class Chunk
 
     public Chunk(Vector2Int location, World world, float scale)
     {
+        placedBuildings = new List<PlacedBuilding>();
         this.world = world;
         worldLocation = location;
 
@@ -101,6 +138,7 @@ public class Chunk
                 points[x, y] = (float)NoiseS3D.Noise((x+worldLocation.x*16)*scale, (y+worldLocation.y*16)*scale);
             }
         }
+        buildings = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "buildings"));
     }
 
     public Vector3[] GetPoints()
@@ -135,5 +173,62 @@ public class Chunk
         mesh.vertices = points.ToArray();
         mesh.triangles = tris.ToArray();
         return mesh;
+    }
+
+    public GameObject MakeChunk(GameObject chunkGameObject, Transform chunkLocation, Transform player)
+    {
+        GameObject gameObject = GameObject.Instantiate(chunkGameObject, chunkLocation);
+        Mesh mesh = GenerateMesh();
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
+        ChunkControler chunkControler = gameObject.GetComponent<ChunkControler>();
+        chunkControler.location = worldLocation;
+        chunkControler.world = world;
+        chunkControler.player = player;
+        gameObject.GetComponent<MeshCollider>().sharedMesh = mesh;
+        gameObject.name = "Chunk " + worldLocation.ToString();
+        this.gameObject = gameObject;
+        foreach (var item in placedBuildings)
+        {
+            PlaceBuilding(item);
+        }
+        return gameObject;
+    }
+
+    public void AddBuilding(Building building, Vector2Int location, float height)
+    {
+        PlacedBuilding newBuilding = new PlacedBuilding(building, location, height, buildings);
+        placedBuildings.Add(newBuilding);
+        for (int x = (int)(location.x - (building.footprint.x / 2)); x < (int)location.x + (building.footprint.x / 2); x++)
+        {
+            for (int y = (int)(location.y - (building.footprint.y / 2)); y < (int)location.y + (building.footprint.y / 2); y++)
+            {
+                if ((y > 16 && x > 16) || (y<0&&x < 0))
+                {
+                    
+                    continue;
+                }
+                if (x > 16 || x < 0)
+                {
+
+                    continue;
+                }
+                if (y > 16 || y < 0)
+                {
+
+                    continue;
+                }
+                points[x, y] = height;
+            }
+        }
+        PlaceBuilding(newBuilding);
+    }
+
+    public void PlaceBuilding(PlacedBuilding building)
+    {
+        GameObject gameObject = GameObject.Instantiate(world.terrainGen.buildingPrefab, this.gameObject.transform);
+
+        gameObject.GetComponent<MeshFilter>().mesh = building.building.levels[building.level].mesh;
+
+        gameObject.transform.position = new Vector3(worldLocation.x * 16 + building.location.x,building.height , worldLocation.y * 16 + building.location.y);
     }
 }

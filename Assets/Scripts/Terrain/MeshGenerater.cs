@@ -57,8 +57,12 @@ public class MeshGenerater
         {
             if (neededChunks.Count!=0) {
                 Chunk chunk = neededChunks.Dequeue();
-                parent.MakeChunk(chunk);
+                chunk.MakeChunk(parent.chunkGameObject, parent.chunkLocation, player);
                 loadedChunks.Add(chunk);
+            }
+            else
+            {
+                yield return new WaitForEndOfFrame();
             }
             yield return null;
         }

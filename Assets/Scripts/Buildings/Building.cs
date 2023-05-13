@@ -2,17 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Building : MonoBehaviour
+[CreateAssetMenu]
+public class Building : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
+    public string name;
+    [System.Serializable]
+    public class Level
     {
-        
+        public Mesh mesh;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Level[] levels;
+    public Vector2 footprint;
 }
