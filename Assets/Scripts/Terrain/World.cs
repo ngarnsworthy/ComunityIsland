@@ -1,11 +1,23 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.IO;
 using UnityEngine;
 
 [System.Serializable]
 public class World
 {
+    public AssetBundle buildings
+    {
+        get
+        {
+            if (!buildingsPrivate)
+            {
+                buildingsPrivate = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "buildings"));
+            }
+            return buildingsPrivate;
+        }
+    }
+    [NonSerialized] private AssetBundle buildingsPrivate;
     [NonSerialized] public TerrainGen terrainGen; //Callback
     public int seed;
     public string name = "World";

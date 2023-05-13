@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 8900000, guid: 619e305f5165a9946b7f72464e44ca4a, type: 3}
   m_Sun: {fileID: 2114283754330233425}
-  m_IndirectSpecularColor: {r: 0.029152213, g: 0.064445764, b: 0.12695098, a: 1}
+  m_IndirectSpecularColor: {r: 0.029152099, g: 0.064445436, b: 0.1269502, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352e71d0328500941b14aaae891cb528, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placeBuilding: {fileID: 0}
+  placeBuilding: {fileID: 11400000, guid: 033e3d9716804cd4a8f1d4f85125f0f8, type: 2}
 --- !u!4 &126493157
 Transform:
   m_ObjectHideFlags: 0
@@ -687,7 +687,7 @@ MonoBehaviour:
   buildings: {fileID: 0}
   buildingPrefab: {fileID: 5947727373545865653, guid: 90fe62405cf5a7446b685fbd852c8527,
     type: 3}
-  loadSave: 0
+  loadSave: 1
   worldName: TestWorld1
   player: {fileID: 135756641613574979}
   world:

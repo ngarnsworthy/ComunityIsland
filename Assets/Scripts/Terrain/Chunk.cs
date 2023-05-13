@@ -16,7 +16,6 @@ using UnityEngine;
 [System.Serializable]
 public class Chunk
 {
-    AssetBundle buildings;
     World world;
     public float[,] points;
     public SerializableVector2Int worldLocation;
@@ -30,7 +29,7 @@ public class Chunk
             get { 
                 if(buildingPrivate == null)
                 {
-                    buildingPrivate = buildings.LoadAsset<Building>(buildingName);
+                    buildingPrivate = world.buildings.LoadAsset<Building>(buildingName);
                 }
                 return buildingPrivate; 
             }
@@ -41,14 +40,14 @@ public class Chunk
         }
 
         public string buildingName;
-        public Vector2Int location;
+        public SerializableVector2Int location;
         public int level;
         public float height;
-        AssetBundle buildings;
+        World world;
 
-        public PlacedBuilding(Building building,  Vector2Int location, float height, AssetBundle buildings)
+        public PlacedBuilding(Building building, SerializableVector2Int location, float height, World world)
         {
-            this.buildings = buildings;
+            this.world = world;
             this.building = building;
             this.location = location;
             this.height = height;
@@ -138,7 +137,6 @@ public class Chunk
                 points[x, y] = (float)NoiseS3D.Noise((x+worldLocation.x*16)*scale, (y+worldLocation.y*16)*scale);
             }
         }
-        buildings = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "buildings"));
     }
 
     public Vector3[] GetPoints()
@@ -196,7 +194,7 @@ public class Chunk
 
     public void AddBuilding(Building building, Vector2Int location, float height)
     {
-        PlacedBuilding newBuilding = new PlacedBuilding(building, location, height, buildings);
+        PlacedBuilding newBuilding = new PlacedBuilding(building, location, height, world);
         placedBuildings.Add(newBuilding);
         for (int x = (int)(location.x - (building.footprint.x / 2)); x < (int)location.x + (building.footprint.x / 2); x++)
         {
