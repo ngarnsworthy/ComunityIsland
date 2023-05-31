@@ -34,6 +34,11 @@ public class World
         this.seed = seed;
     }
 
+    public Chunk GetChunkAtPoint(Vector3 location)
+    {
+        return chunks[new Vector2Int((int)(location.x / 16), (int)(location.z / 16))];
+    }
+
     public List<Chunk> CreateChunks(Vector3 playerLocation)
     {
         List<Chunk> loadedChunks = new List<Chunk>();

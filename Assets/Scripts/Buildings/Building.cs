@@ -5,7 +5,6 @@ using UnityEngine;
 [CreateAssetMenu]
 public class Building : ScriptableObject
 {
-    public string name;
     [System.Serializable]
     public class Level
     {

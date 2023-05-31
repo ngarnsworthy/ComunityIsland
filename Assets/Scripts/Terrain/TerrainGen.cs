@@ -4,6 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 public class TerrainGen : MonoBehaviour
 {
+    public static TerrainGen terrainGen;
     public AssetBundle buildings;
     public GameObject buildingPrefab;
     public bool loadSave = true;
@@ -21,6 +22,7 @@ public class TerrainGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        TerrainGen.terrainGen = this;
         if (loadSave && System.IO.File.Exists(Application.persistentDataPath + "/" + worldName))
         {
             world = SaveAsBinary.ReadFromBinaryFile<World>(Application.persistentDataPath + "/" + worldName);
