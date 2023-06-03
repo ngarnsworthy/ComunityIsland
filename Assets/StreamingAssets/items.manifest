@@ -1,21 +1,23 @@
 ManifestFileVersion: 0
-CRC: 206792913
+CRC: 1059368143
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3f1f5a63bd9139832bb34c6a5207f7d5
+    Hash: 9e6b4ea8fb7e7241b4658a6c65e359e1
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b2d68a07085d6089c691432e65897db2
+    Hash: 16ac867ef1e355ce5b17992412e324dc
 HashAppended: 0
 ClassTypes:
-- Class: 43
+- Class: 28
   Script: {instanceID: 0}
 - Class: 114
-  Script: {fileID: 11500000, guid: b458810011052d44bad7b0447898e590, type: 3}
+  Script: {fileID: 11500000, guid: c56aecf902b0c4780a0bd355d0121516, type: 3}
 - Class: 115
+  Script: {instanceID: 0}
+- Class: 213
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Buildings/House.asset
+- Assets/Items/DEBUGItem.asset
 Dependencies: []

@@ -1,17 +1,16 @@
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 public class TerrainGen : MonoBehaviour
 {
     public static TerrainGen terrainGen;
+    public static World world;
     public AssetBundle buildings;
     public GameObject buildingPrefab;
     public bool loadSave = true;
     public string worldName;
     public Transform player;
     [HideInInspector]
-    public World world;
     MeshGenerater meshGenerater;
     MeshFilter meshFilter;
     public Transform chunkLocation;
@@ -22,7 +21,6 @@ public class TerrainGen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        TerrainGen.terrainGen = this;
         if (loadSave && System.IO.File.Exists(Application.persistentDataPath + "/" + worldName))
         {
             world = SaveAsBinary.ReadFromBinaryFile<World>(Application.persistentDataPath + "/" + worldName);
@@ -38,6 +36,8 @@ public class TerrainGen : MonoBehaviour
         meshFilter = GetComponent<MeshFilter>();
         StartCoroutine(meshGenerater.AddToQueue());
         StartCoroutine(meshGenerater.ClearQueue());
+
+        TerrainGen.terrainGen = this;
     }
 
     private void OnDestroy()

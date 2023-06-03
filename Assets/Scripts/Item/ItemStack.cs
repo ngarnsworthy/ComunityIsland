@@ -1,5 +1,4 @@
-﻿using System;
-public class ItemStack
+﻿public class ItemStack
 {
     public Item item;
     public int stackSize;

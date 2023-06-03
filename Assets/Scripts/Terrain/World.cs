@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using static Chunk;
 
 [System.Serializable]
 public class World
@@ -17,7 +18,19 @@ public class World
             return buildingsPrivate;
         }
     }
+    public AssetBundle items
+    {
+        get
+        {
+            if (!itemsPrivate)
+            {
+                itemsPrivate = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "items"));
+            }
+            return itemsPrivate;
+        }
+    }
     [NonSerialized] private AssetBundle buildingsPrivate;
+    [NonSerialized] private AssetBundle itemsPrivate;
     [NonSerialized] public TerrainGen terrainGen; //Callback
     public int seed;
     public string name = "World";
@@ -36,7 +49,11 @@ public class World
 
     public Chunk GetChunkAtPoint(Vector3 location)
     {
-        return chunks[new Vector2Int((int)(location.x / 16), (int)(location.z / 16))];
+        if (chunks.ContainsKey(new Vector2Int((int)(location.x / 16), (int)(location.z / 16))))
+        {
+            return chunks[new Vector2Int((int)(location.x / 16), (int)(location.z / 16))];
+        }
+        return null;
     }
 
     public List<Chunk> CreateChunks(Vector3 playerLocation)
@@ -59,7 +76,41 @@ public class World
 
     public void Save()
     {
-        SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath+"/"+name, this);
+        SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath + "/" + name, this);
         Debug.Log(Application.persistentDataPath + "/" + name);
+    }
+
+    public class ChunkLocation
+    {
+        public Chunk chunk;
+        public int x;
+        public int y;
+
+        public ChunkLocation(Chunk chunk, int x, int y)
+        {
+            this.chunk = chunk;
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    public static ChunkLocation ChunkLocationFromPoint(Vector3 point)
+    {
+        return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int((int)(point.x / 16), (int)(point.z / 16))], (int)(point.x % 16), (int)(point.z % 16));
+    }
+
+    public static ChunkLocation ChunkLocationFromPoint(Vector2Int point)
+    {
+        return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int((int)(point.x / 16), (int)(point.y / 16))], (int)(point.x % 16), (int)(point.y % 16));
+    }
+
+    public Vector3 Vector3FromChunkLocation(ChunkLocation point)
+    {
+        return new Vector3(point.x, ChunkLocationToHeight(point), point.y);
+    }
+
+    public float ChunkLocationToHeight(ChunkLocation point)
+    {
+        return point.chunk.points[point.x, point.y];
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlaceBuilding : MonoBehaviour
@@ -23,9 +21,8 @@ public class PlaceBuilding : MonoBehaviour
             {
                 Vector3 location = hit.point;
                 Vector2Int rayChunk = new Vector2Int((int)(location.x / 16), (int)(location.z / 16));
-                Debug.Log(rayChunk.ToString());
-                Debug.Log(terrainGen.world.chunks[rayChunk]);
-                Chunk chunk = terrainGen.world.chunks[rayChunk];
+                Debug.Log(TerrainGen.world.chunks[rayChunk]);
+                Chunk chunk = TerrainGen.world.chunks[rayChunk];
                 chunk.AddBuilding(placeBuilding, new Vector2Int((int)location.x % 16, (int)location.z % 16), location.y);
             }
         }

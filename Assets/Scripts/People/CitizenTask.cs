@@ -1,17 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-
-public abstract class CitizenTask
+﻿public abstract class CitizenTask
 {
-    public Citizen citizen;
     public PlacedBuilding building;
+    public bool started = false;
 
-    public CitizenTask(Citizen citizen, PlacedBuilding building)
+    public CitizenTask(PlacedBuilding building)
     {
-        this.citizen = citizen;
         this.building = building;
     }
 
-    public abstract PlacedBuilding StartTaskLocation();
-    public abstract PlacedBuilding NextTaskLocation();
+    public abstract PlacedBuilding StartTaskLocation(Citizen citizen);
+    public abstract PlacedBuilding NextTaskLocation(Citizen citizen);
 }

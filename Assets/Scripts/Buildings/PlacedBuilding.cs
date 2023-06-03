@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
 using System.Collections.Generic;
-using System;
+using UnityEngine;
 
 [System.Serializable]
 public class PlacedBuilding
@@ -8,6 +8,7 @@ public class PlacedBuilding
     public GameObject gameObject;
     public List<Citizen> workers;
     public List<ItemStack> items;
+    public Queue<CitizenTask> tasks;
     [NonSerialized] private Building buildingPrivate;
     public Building building
     {

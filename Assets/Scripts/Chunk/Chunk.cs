@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 //public enum ChunkType
@@ -18,6 +17,7 @@ public class Chunk
 {
     World world;
     public float[,] points;
+    public bool[,] walkable;
     public SerializableVector2Int worldLocation;
     public List<PlacedBuilding> placedBuildings;
 
@@ -97,12 +97,21 @@ public class Chunk
         this.world = world;
         worldLocation = location;
 
+        walkable = new bool[16, 16];
+        for (int x = 0; x < 16; x++)
+        {
+            for (int y = 0; y < 16; y++)
+            {
+                walkable[x, y] = true;
+            }
+        }
+
         points = new float[17, 17];
         for (int x = 0; x < 17; x++)
         {
             for (int y = 0; y < 17; y++)
             {
-                points[x, y] = (float)NoiseS3D.Noise((x+worldLocation.x*16)*scale, (y+worldLocation.y*16)*scale);
+                points[x, y] = (float)NoiseS3D.Noise((x + worldLocation.x * 16) * scale, (y + worldLocation.y * 16) * scale);
             }
         }
     }
@@ -168,9 +177,9 @@ public class Chunk
         {
             for (int y = (int)(location.y - (building.footprint.y / 2)); y < (int)location.y + (building.footprint.y / 2); y++)
             {
-                if ((y > 16 && x > 16) || (y<0&&x < 0))
+                if ((y > 16 && x > 16) || (y < 0 && x < 0))
                 {
-                    
+
                     continue;
                 }
                 if (x > 16 || x < 0)
@@ -184,6 +193,7 @@ public class Chunk
                     continue;
                 }
                 points[x, y] = height;
+                walkable[x, y] = false;
             }
         }
         PlaceBuilding(newBuilding);
@@ -195,6 +205,6 @@ public class Chunk
 
         gameObject.GetComponent<MeshFilter>().mesh = building.building.levels[building.level].mesh;
 
-        gameObject.transform.position = new Vector3(worldLocation.x * 16 + building.location.x,building.height , worldLocation.y * 16 + building.location.y);
+        gameObject.transform.position = new Vector3(worldLocation.x * 16 + building.location.x, building.height, worldLocation.y * 16 + building.location.y);
     }
 }

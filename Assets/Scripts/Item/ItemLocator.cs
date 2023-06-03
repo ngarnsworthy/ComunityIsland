@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public static class ItemLocator
 {
@@ -9,7 +8,7 @@ public static class ItemLocator
         List<PlacedBuilding> buildings = new List<PlacedBuilding>();
         int foundItems = 0;
         Queue<Chunk> chunkQueue = new Queue<Chunk>();
-        chunkQueue.Enqueue(TerrainGen.terrainGen.world.GetChunkAtPoint(location));
+        chunkQueue.Enqueue(TerrainGen.world.GetChunkAtPoint(location));
         List<Chunk> checkedChunks = new List<Chunk>();
         HashSet<Chunk> allChunks = new HashSet<Chunk>();
         while (foundItems < count)
@@ -41,10 +40,10 @@ public static class ItemLocator
 
             foreach (PlacedBuilding building in chunk.placedBuildings)
             {
-                if (excludedBuildings!=null&&excludedBuildings.Contains(building))
+                if (excludedBuildings != null && excludedBuildings.Contains(building))
                     continue;
                 ItemStack foundItemStack = building.items.Find((e) => { return e.item = item; });
-                if (foundItemStack!=null)
+                if (foundItemStack != null)
                 {
                     buildings.Add(building);
                     foundItems += foundItemStack.stackSize;

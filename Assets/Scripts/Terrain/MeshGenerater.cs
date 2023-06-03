@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class MeshGenerater
@@ -55,7 +54,8 @@ public class MeshGenerater
     {
         while (true)
         {
-            if (neededChunks.Count!=0) {
+            if (neededChunks.Count != 0)
+            {
                 Chunk chunk = neededChunks.Dequeue();
                 chunk.MakeChunk(parent.chunkGameObject, parent.chunkLocation, player);
                 loadedChunks.Add(chunk);

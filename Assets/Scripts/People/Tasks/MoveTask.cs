@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class MoveTask : CitizenTask
@@ -7,14 +6,15 @@ public class MoveTask : CitizenTask
     Item itemToGet;
     int count;
     public List<PlacedBuilding> buildingsToVisit = new List<PlacedBuilding>();
-    public MoveTask(Citizen citizen, PlacedBuilding building, Item itemToGet, int count) : base(citizen, building)
+    public MoveTask(PlacedBuilding building, Item itemToGet, int count) : base(building)
     {
         this.itemToGet = itemToGet;
         this.count = count;
     }
 
-    public override PlacedBuilding StartTaskLocation()
+    public override PlacedBuilding StartTaskLocation(Citizen citizen)
     {
+        started = true;
         List<PlacedBuilding> excludedBuildings = new List<PlacedBuilding>();
         excludedBuildings.Add(building);
         buildingsToVisit = ItemLocator.LocateItem(citizen.transform.position, itemToGet, count, excludedBuildings);
@@ -33,7 +33,7 @@ public class MoveTask : CitizenTask
         return closestBuilding;
     }
 
-    public override PlacedBuilding NextTaskLocation()
+    public override PlacedBuilding NextTaskLocation(Citizen citizen)
     {
         float minDistance = float.PositiveInfinity;
         PlacedBuilding closestBuilding = null;
