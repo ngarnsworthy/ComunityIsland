@@ -11,4 +11,5 @@ public class Building : ScriptableObject
     }
     public Level[] levels;
     public Vector2 footprint;
+    public Sprite sprite;
 }
