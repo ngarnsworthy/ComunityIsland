@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b458810011052d44bad7b0447898e590, type: 3}
   m_Name: ItemSink_DEBUG
   m_EditorClassIdentifier: 
-  name: 
-  levels: []
-  footprint: {x: 0, y: 0}
+  levels:
+  - mesh: {fileID: -5495902117074765545, guid: ff46bbd1f9ab5b74b949b10d977f3021, type: 3}
+    maxWorkers: 4
+  footprint: {x: 2, y: 2}

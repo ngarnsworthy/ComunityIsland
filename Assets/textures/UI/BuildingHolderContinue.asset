@@ -1,0 +1,254 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c374640ea5446944980aa7e8a9603df8, type: 3}
+  m_Name: BuildingHolderContinue
+  m_EditorClassIdentifier: 
+  scale9Grid: {x: 0, y: 0, z: 0, w: 0}
+  pivot: {x: 0, y: 0}
+  meshCompression: 0
+  assetType: 1
+  pivotIndex: 0
+  antialiasingWidth: 0
+  scale: 1
+  curveQuality: 1
+  quality: 0
+  depthOffset: 0.1
+  offsetFactor: 0
+  offsetUnits: 0
+  colliderMargin: 1
+  colliderQuality: 1
+  bitmapWidth: 525
+  bitmapHeight: 350
+  optimizeMesh: 0
+  generateCollider: 0
+  useLight: 0
+  twoSided: 1
+  useScale9Grid: 0
+  colliderPaths: []
+  data: "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<!-- Created
+    with Inkscape (http://www.inkscape.org/) -->\n\n<svg\n   width=\"75\"\n   height=\"50\"\n  
+    viewBox=\"0 0 19.843749 13.229166\"\n   version=\"1.1\"\n   id=\"svg5\"\n   inkscape:version=\"1.1.1
+    (3bf5ae0d25, 2021-09-20)\"\n   sodipodi:docname=\"BuildingHolderContinue.svg\"\n  
+    xmlns:inkscape=\"http://www.inkscape.org/namespaces/inkscape\"\n   xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n  
+    xmlns=\"http://www.w3.org/2000/svg\"\n   xmlns:svg=\"http://www.w3.org/2000/svg\">\n 
+    <sodipodi:namedview\n     id=\"namedview7\"\n     pagecolor=\"#ffffff\"\n    
+    bordercolor=\"#666666\"\n     borderopacity=\"1.0\"\n     inkscape:pageshadow=\"2\"\n    
+    inkscape:pageopacity=\"0.0\"\n     inkscape:pagecheckerboard=\"0\"\n     inkscape:document-units=\"mm\"\n    
+    showgrid=\"false\"\n     units=\"px\"\n     inkscape:zoom=\"5.1241863\"\n    
+    inkscape:cx=\"31.322046\"\n     inkscape:cy=\"16.880729\"\n     inkscape:window-width=\"1920\"\n    
+    inkscape:window-height=\"1017\"\n     inkscape:window-x=\"1432\"\n     inkscape:window-y=\"-8\"\n    
+    inkscape:window-maximized=\"1\"\n     inkscape:current-layer=\"layer1\" />\n 
+    <defs\n     id=\"defs2\" />\n  <g\n     inkscape:label=\"Layer 1\"\n     inkscape:groupmode=\"layer\"\n    
+    id=\"layer1\">\n    <path\n       style=\"fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1\"\n      
+    d=\"M 0.05700151,0.08138011 H 16.41968 L 19.770537,13.03371 3.4078565,13.033709
+    Z\"\n       id=\"path935\"\n       sodipodi:nodetypes=\"ccccc\" />\n  </g>\n</svg>\n"
+  info: 10 verts, 10 tris   colors, uv
+  materialFlags: 2
+--- !u!21 &2086262275297570105
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BuildingHolderContinueTransparent
+  m_Shader: {fileID: 4800000, guid: 5dd82523e7fca734b9ed4b9738d0c956, type: 3}
+  m_ShaderKeywords: SVG_TOOLS_TRANSPARENT
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 3000
+  stringTagMap:
+    RenderType: Transparent
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _Cull: 0
+    - _DstBlend: 10
+    - _Factor: 0
+    - _SrcBlend: 5
+    - _Units: 0
+    - _ZTest: 4
+    - _ZWrite: 0
+    m_Colors:
+    - offsetX: {r: 0, g: 0, b: 0, a: 0}
+    - offsetY: {r: 0, g: 0, b: 0, a: 0}
+    - scaleX: {r: 1, g: 1, b: 1, a: 1}
+    - scaleY: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
+--- !u!43 &8010088550686032524
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: BuildingHolderContinue
+  serializedVersion: 10
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 30
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 10
+    localAABB:
+      m_Center: {x: 37.5, y: 24.880632, z: 0}
+      m_Extent: {x: 37.5, y: 24.880632, z: 0}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 0
+  m_KeepIndices: 0
+  m_IndexFormat: 1
+  m_IndexBuffer: 010000000200000007000000080000000100000007000000000000000100000008000000090000000000000008000000020000000600000007000000050000000600000002000000030000000500000002000000090000000300000000000000040000000300000009000000040000000500000003000000
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 10
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 2
+      dimension: 4
+    - stream: 0
+      offset: 16
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 240
+    _typelessdata: 367b5c3f93d0434200000000000000ff0000803f00007f436e4654414000803f00000000000000ff0000803f00007f43aa2794422000803f00000000000000ff0000803f00007f43a7af764293d0434200000000000000ff0000803f00007f436cfb7942890b474200000000000000ff0000803f00007f4300009642e09eb63f00000000000000ff0000803f00007f43000096420000000000000000000000ff0000803f00007f4343e347410000803600000000000000ff0000803f00007f43000000001329414200000000000000ff0000803f00007f4300000000890b474200000000000000ff0000803f00007f43
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 37.5, y: 24.880632, z: 0}
+    m_Extent: {x: 37.5, y: 24.880632, z: 0}
+  m_MeshUsageFlags: 0
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  m_MeshMetrics[0]: 1
+  m_MeshMetrics[1]: 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 

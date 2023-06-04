@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class PlacedBuilding
 {
-    public GameObject gameObject;
+    [NonSerialized] public GameObject gameObject;
     public List<Citizen> workers;
     public List<ItemStack> items;
     public Queue<CitizenTask> tasks;
