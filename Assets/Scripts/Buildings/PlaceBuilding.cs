@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlaceBuilding : MonoBehaviour
 {
     TerrainGen terrainGen;
-    public Building placeBuilding;
+    public Building placedBuilding;
+    public InputActionReference placeBuilding;
 
     private void Start()
     {
@@ -12,7 +14,7 @@ public class PlaceBuilding : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (placeBuilding.action.ReadValue<bool>())
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -23,7 +25,7 @@ public class PlaceBuilding : MonoBehaviour
                 Vector2Int rayChunk = new Vector2Int((int)(location.x / 16), (int)(location.z / 16));
                 Debug.Log(TerrainGen.world.chunks[rayChunk]);
                 Chunk chunk = TerrainGen.world.chunks[rayChunk];
-                chunk.AddBuilding(placeBuilding, new Vector2Int((int)location.x % 16, (int)location.z % 16), location.y);
+                chunk.AddBuilding(placedBuilding, new Vector2Int((int)location.x % 16, (int)location.z % 16), location.y);
             }
         }
     }

@@ -35,15 +35,7 @@ public class BuildingPicker : MonoBehaviour
 
             Transform child = buildingPickerSlots[i].transform.GetChild(0);
 
-            UnityAction buttonAction = new UnityAction(()=> { ChangeBuilding(buildingAssets[i]); });
-            child.GetComponent<Button>().onClick.AddListener(buttonAction);
-
             child.GetComponent<Image>().sprite = TerrainGen.world.buildings.LoadAsset<Building>(buildingAssets[i]).sprite;
         }
-    }
-
-    public void ChangeBuilding(string name)
-    {
-        buildingPlacer.placeBuilding = TerrainGen.world.buildings.LoadAsset<Building>(name);
     }
 }

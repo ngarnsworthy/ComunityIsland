@@ -133,8 +133,18 @@ public class Chunk
     {
         List<int> tris = new List<int>();
         List<Vector3> points = new List<Vector3>();
+        List<Vector2> UVs = new List<Vector2>();
         int start = points.Count;
         points.AddRange(this.GetPoints());
+
+        for (int x = 0; x < 17; x++)
+        {
+            for (int y = 0; y < 17; y++)
+            {
+                UVs.Add(new Vector2(((float)x) / 17, ((float)y) / 17));
+            }
+        }
+
         for (int x = 0; x < 16; x++)
         {
             for (int y = 0; y < 16; y++)
@@ -147,6 +157,7 @@ public class Chunk
         Mesh mesh = new Mesh();
         mesh.vertices = points.ToArray();
         mesh.triangles = tris.ToArray();
+        mesh.uv = UVs.ToArray();
         return mesh;
     }
 
