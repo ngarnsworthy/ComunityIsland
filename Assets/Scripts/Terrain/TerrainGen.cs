@@ -18,7 +18,6 @@ public class TerrainGen : MonoBehaviour
     public int loadingDistance;
     public float scale;
 
-    // Start is called before the first frame update
     void Start()
     {
         if (loadSave && System.IO.File.Exists(Application.persistentDataPath + "/" + worldName))

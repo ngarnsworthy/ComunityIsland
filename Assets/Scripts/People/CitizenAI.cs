@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using static UnityEditor.Progress;
-using Unity.VisualScripting;
-using static UnityEditor.FilePathAttribute;
 
 public class CitizenAI
 {
@@ -19,7 +16,7 @@ public class CitizenAI
             chunkQueue.Enqueue(TerrainGen.world.GetChunkAtPoint(citizen.gameObject.transform.position));
             List<Chunk> checkedChunks = new List<Chunk>();
             HashSet<Chunk> allChunks = new HashSet<Chunk>();
-            while (employment == null && allChunks.Count <= 100)
+            while (employment == null && chunkQueue.Count!=0)
             {
                 Chunk chunk = chunkQueue.Dequeue();
                 if (allChunks.Count <= 100)

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b458810011052d44bad7b0447898e590, type: 3}
   m_Name: House
   m_EditorClassIdentifier: 
-  name: House
   levels:
   - mesh: {fileID: -462981019419857548, guid: b4ab0a191fba9234190249737a02619b, type: 3}
+    maxWorkers: 0
   footprint: {x: 2, y: 2}
+  sprite: {fileID: 21300000, guid: 8d1201cae2193794fb870b1083ab5030, type: 3}

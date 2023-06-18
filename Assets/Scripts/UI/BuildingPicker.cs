@@ -6,17 +6,20 @@ using UnityEngine.Events;
 
 public class BuildingPicker : MonoBehaviour
 {
-    public Transform location;
     public PlaceBuilding buildingPlacer;
+
+    public Transform location;
     public GameObject buildingPickerSlot;
     public GameObject firstBuildingPickerSlot;
     List<GameObject> buildingPickerSlots = new List<GameObject>();
+
+    int buildingPickerSlotIndex = 0;
 
     void Start()
     {
         buildingPickerSlots.Add(firstBuildingPickerSlot);
         string[] buildingAssets = TerrainGen.world.buildings.GetAllAssetNames();
-        for (int i = 0; i < buildingAssets.Length - 1; i++)
+        for (int i = 0; i < buildingAssets.Length; i++)
         {
             if (i != 0)
             {

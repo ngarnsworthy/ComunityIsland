@@ -5,7 +5,7 @@ public class MakeCitizen : MonoBehaviour
     public GameObject citizen;
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             Instantiate(citizen);
         }

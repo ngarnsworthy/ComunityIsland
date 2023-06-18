@@ -39,5 +39,7 @@ public class PlacedBuilding
         this.building = building;
         this.location = location;
         this.height = height;
+        workers = new List<Citizen>();
+        tasks = new Queue<CitizenTask>();
     }
 }

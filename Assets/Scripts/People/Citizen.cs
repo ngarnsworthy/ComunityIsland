@@ -1,12 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody)), Serializable]
 public class Citizen : MonoBehaviour
 {
     public float speed;
     public CitizenAI AI;
     public Pathfinder.AStarPath pathfinder;
-    Rigidbody rigidbody;
+    [NonSerialized]Rigidbody rigidbody;
 
     private void Awake()
     {
@@ -18,6 +19,9 @@ public class Citizen : MonoBehaviour
     void Update()
     {
         AI.Update();
-        rigidbody.MovePosition(pathfinder.NextPosition(Time.deltaTime* speed));
+        if (pathfinder != null)
+        {
+            rigidbody.MovePosition(pathfinder.NextPosition(Time.deltaTime * speed));
+        }
     }
 }

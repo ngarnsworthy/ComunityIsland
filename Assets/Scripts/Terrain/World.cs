@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using static Chunk;
 
 [System.Serializable]
 public class World
