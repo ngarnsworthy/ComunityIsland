@@ -3,21 +3,23 @@ using UnityEngine.InputSystem;
 
 public class PlaceBuilding : MonoBehaviour
 {
+    public Camera camera;
     TerrainGen terrainGen;
     public Building placedBuilding;
     public InputActionReference placeBuilding;
 
     private void Start()
     {
+        placeBuilding.action.Enable();
         terrainGen = GameObject.Find("Terrain").GetComponent<TerrainGen>();
     }
 
     void Update()
     {
-        if (placeBuilding.action.ReadValue<bool>())
+        if (placeBuilding.action.ReadValue<float>()!=0)
         {
             RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));
 
             if (Physics.Raycast(ray, out hit))
             {

@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class BuildingPicker : MonoBehaviour
 {
+    public InputActionReference changeSelection;
+
     public PlaceBuilding buildingPlacer;
 
     public Transform location;
@@ -17,6 +19,7 @@ public class BuildingPicker : MonoBehaviour
 
     void Start()
     {
+        changeSelection.action.Enable();
         buildingPickerSlots.Add(firstBuildingPickerSlot);
         string[] buildingAssets = TerrainGen.world.buildings.GetAllAssetNames();
         for (int i = 0; i < buildingAssets.Length; i++)
@@ -36,6 +39,21 @@ public class BuildingPicker : MonoBehaviour
             Transform child = buildingPickerSlots[i].transform.GetChild(0);
 
             child.GetComponent<Image>().sprite = TerrainGen.world.buildings.LoadAsset<Building>(buildingAssets[i]).sprite;
+        }
+    }
+
+    private void Update()
+    {
+        buildingPickerSlotIndex += (int)changeSelection.action.ReadValue<float>();
+
+        if (buildingPickerSlotIndex < 0)
+        {
+            buildingPickerSlotIndex = Mathf.Abs(3-(buildingPickerSlotIndex % buildingPickerSlots.Count));
+        }
+
+        if(buildingPickerSlotIndex > buildingPickerSlots.Count)
+        {
+            buildingPickerSlotIndex %= buildingPickerSlots.Count;
         }
     }
 }
