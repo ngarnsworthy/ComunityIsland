@@ -16,7 +16,7 @@ public class PlaceBuilding : MonoBehaviour
 
     void Update()
     {
-        if (placeBuilding.action.ReadValue<float>()!=0)
+        if (placeBuilding.action.ReadValue<float>() != 0)
         {
             RaycastHit hit;
             Ray ray = camera.ScreenPointToRay(new Vector2(Screen.width / 2, Screen.height / 2));

@@ -9,8 +9,8 @@ public class DEBUG : MonoBehaviour
     public GameObject citizen;
     void Update()
     {
-        if(inputActions.FindAction(spawnActionName).triggered)
-        Instantiate(citizen);
+        if (inputActions.FindAction(spawnActionName).triggered)
+            Instantiate(citizen);
     }
-    
+
 }

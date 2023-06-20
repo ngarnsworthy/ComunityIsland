@@ -17,6 +17,7 @@ public class TerrainGen : MonoBehaviour
     public GameObject chunkGameObject;
     public int loadingDistance;
     public float scale;
+    public GameObject citizenPrefab;
 
     void Start()
     {

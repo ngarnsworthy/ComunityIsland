@@ -59,4 +59,24 @@ public struct SerializableVector2Int
     {
         return new SerializableVector2Int(rValue.x, rValue.y);
     }
+
+    public static SerializableVector2Int operator /(SerializableVector2Int lhs, int rhs)
+    {
+        return new SerializableVector2Int(lhs.x / rhs, lhs.y / rhs);
+    }
+
+    public static SerializableVector2Int operator +(SerializableVector2Int lhs, int rhs)
+    {
+        return new SerializableVector2Int(lhs.x + rhs, lhs.y + rhs);
+    }
+
+    public static SerializableVector2Int operator -(SerializableVector2Int lhs, int rhs)
+    {
+        return new SerializableVector2Int(lhs.x - rhs, lhs.y - rhs);
+    }
+
+    public static SerializableVector2Int operator -(int lhs, SerializableVector2Int rhs)
+    {
+        return new SerializableVector2Int(lhs - rhs.x, lhs - rhs.y);
+    }
 }

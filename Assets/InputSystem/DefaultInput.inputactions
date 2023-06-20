@@ -115,6 +115,17 @@
                 },
                 {
                     "name": "",
+                    "id": "685567f3-a64e-4be9-a911-1b4e40bd9f03",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "70f099db-df8e-4a2c-8095-100feed51598",
                     "path": "<Mouse>/delta",
                     "interactions": "",
@@ -126,11 +137,33 @@
                 },
                 {
                     "name": "",
+                    "id": "5a97b51a-78f5-4e2f-ba49-34c5b2ab6fc1",
+                    "path": "<Gamepad>/rightStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "f1d4220b-2373-4f71-bdb2-03bdb5f0f4dc",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "14a68d69-237b-4479-9cda-f5240bf6c313",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -147,7 +180,7 @@
                     "id": "cc37214a-2a2a-4475-b5c8-3d81b4c44435",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "Press"
                 },
                 {
                     "name": "Select Building",
@@ -172,6 +205,17 @@
                 },
                 {
                     "name": "",
+                    "id": "d3a73da9-6b8b-4ab5-82e9-df79bdbe019c",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Place Building",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "642f6b58-2c17-4725-b538-2625e3c03d03",
                     "path": "<Mouse>/scroll/y",
                     "interactions": "",
@@ -180,6 +224,39 @@
                     "action": "Select Building",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "4877c83f-3cfd-4b2c-bce9-98ddf6446e64",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Select Building",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "db4c2910-4dbb-44fa-97a7-bf551afe3c9f",
+                    "path": "<Gamepad>/leftTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Select Building",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "49ff883e-8471-4faf-b921-b33dd7735d21",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Select Building",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 }
             ]
         }
@@ -196,6 +273,17 @@
                 },
                 {
                     "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Gamepad",
+            "bindingGroup": "Gamepad",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
                     "isOptional": false,
                     "isOR": false
                 }

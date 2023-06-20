@@ -6,7 +6,8 @@ using UnityEngine;
 public class PlacedBuilding
 {
     [NonSerialized] public GameObject gameObject;
-    public List<Citizen> workers;
+    List<CitizenAI> citizenAIList;
+    [NonSerialized] public List<Citizen> workers;
     public List<ItemStack> items;
     public Queue<CitizenTask> tasks;
     [NonSerialized] private Building buildingPrivate;
@@ -31,15 +32,43 @@ public class PlacedBuilding
     public SerializableVector2Int location;
     public int level;
     public float height;
-    World world;
-
-    public PlacedBuilding(Building building, SerializableVector2Int location, float height, World world)
+    World world
     {
-        this.world = world;
+        get
+        {
+            if (pWorld == null)
+            {
+                pWorld = TerrainGen.world;
+            }
+            return pWorld;
+        }
+    }
+    [NonSerialized] private World pWorld;
+
+    public PlacedBuilding(Building building, SerializableVector2Int location, float height)
+    {
         this.building = building;
         this.location = location;
         this.height = height;
         workers = new List<Citizen>();
         tasks = new Queue<CitizenTask>();
+        citizenAIList = new List<CitizenAI>();
+    }
+
+    public void Load()
+    {
+        foreach (var item in citizenAIList)
+        {
+            GameObject.Instantiate(TerrainGen.terrainGen.citizenPrefab).GetComponent<Citizen>().AI = item;
+        }
+    }
+
+    public void Save()
+    {
+        citizenAIList.Clear();
+        foreach (var item in workers)
+        {
+            citizenAIList.Add(item.AI);
+        }
     }
 }

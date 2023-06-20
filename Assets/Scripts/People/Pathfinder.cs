@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Pathfinder
@@ -57,11 +56,11 @@ public class Pathfinder
         {
             get
             {
-                if(pNeighbours == null)
+                if (pNeighbours == null)
                 {
                     AStarPoint[] newNeighbours = new AStarPoint[4];
 
-                    World.ChunkLocation neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x+1, chunkLocation.y));
+                    World.ChunkLocation neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x + 1, chunkLocation.y));
                     newNeighbours[0] = new AStarPoint(path, TerrainGen.world.Vector3FromChunkLocation(neighboursChunkLocation), this);
                     neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x - 1, chunkLocation.y));
                     newNeighbours[1] = new AStarPoint(path, TerrainGen.world.Vector3FromChunkLocation(neighboursChunkLocation), this);
@@ -75,7 +74,7 @@ public class Pathfinder
                         AStarPoint item = newNeighbours[i];
                         if (path.openSet.Contains(item))
                         {
-                            newNeighbours[i] = path.openSet.Find((e)=>item==e);
+                            newNeighbours[i] = path.openSet.Find((e) => item == e);
                         }
                         else if (path.closedSet.Contains(item))
                         {
@@ -155,10 +154,10 @@ public class Pathfinder
                         {
                             pPath = ReconstructPath(startPoint, endPoint);
                             trackLegnth = 0;
-                            for (int i = 0; i < pPath.Count-1; i++)
+                            for (int i = 0; i < pPath.Count - 1; i++)
                             {
                                 AStarPoint point = pPath[i];
-                                AStarPoint nextPoint = pPath[i+1];
+                                AStarPoint nextPoint = pPath[i + 1];
                                 trackLegnth += Vector3.Distance(point.position, nextPoint.position);
                             }
                             currentPointIndex = 0;
@@ -200,7 +199,7 @@ public class Pathfinder
         {
             segmentPrecentMoved += movement / trackLegnth / Vector3.Distance(path[currentPointIndex].position, path[currentPointIndex + 1].position);
 
-            while(segmentPrecentMoved >= 1) 
+            while (segmentPrecentMoved >= 1)
             {
                 segmentPrecentMoved--;
                 currentPointIndex++;

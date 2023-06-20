@@ -1,8 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class BuildingPicker : MonoBehaviour
 {
@@ -48,10 +47,10 @@ public class BuildingPicker : MonoBehaviour
 
         if (buildingPickerSlotIndex < 0)
         {
-            buildingPickerSlotIndex = Mathf.Abs(3-(buildingPickerSlotIndex % buildingPickerSlots.Count));
+            buildingPickerSlotIndex = Mathf.Abs(3 - (buildingPickerSlotIndex % buildingPickerSlots.Count));
         }
 
-        if(buildingPickerSlotIndex > buildingPickerSlots.Count)
+        if (buildingPickerSlotIndex > buildingPickerSlots.Count)
         {
             buildingPickerSlotIndex %= buildingPickerSlots.Count;
         }

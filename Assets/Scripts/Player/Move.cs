@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,7 +8,6 @@ public class Move : MonoBehaviour
     public InputActionReference jump;
 
     [Header("Collitions")]
-    public GameObject terrain;
     public Transform camera;
 
     [Header("Movement")]
@@ -35,43 +32,49 @@ public class Move : MonoBehaviour
 
         float rotation = camera.transform.rotation.eulerAngles.y * -1;
 
-        Vector3 velocity;
+        Vector3 movementChange;
 
         if (!(movement == Vector2.zero))
         {
-            velocity = new Vector3(
+            movementChange = new Vector3(
                 movement.x * Mathf.Cos(rotation * Mathf.Deg2Rad) - movement.y * Mathf.Sin(rotation * Mathf.Deg2Rad),
                 0,
                 movement.y * Mathf.Cos(rotation * Mathf.Deg2Rad) + movement.x * Mathf.Sin(rotation * Mathf.Deg2Rad));
         }
         else
         {
-            velocity = new Vector3();
+            movementChange = new Vector3();
         }
 
-        velocity.y = TerrainGen.world.ChunkLocationToHeight(World.ChunkLocationFromPoint(velocity));
+        Vector3 pos = transform.position;
+        float height = TerrainGen.world[new Vector2Int((int)pos.y, (int)pos.x)];
+        if (transform.position.y < height - 10)
+        {
+            pos.y = height + 10;
+            transform.position = pos;
+        }
 
         if (jump.action.ReadValue<float>() != 0 && touchingGround)
         {
-            velocity.y += jumpForce;
+            Vector3 velocity = rigidbody.velocity;
+            velocity.y = jumpForce;
+            rigidbody.velocity = velocity;
         }
 
-        rigidbody.MovePosition(velocity + transform.position); 
+        rigidbody.MovePosition(movementChange + transform.position);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.transform.parent == terrain)
-        {
-            touchingGround = true;
-        }
+
+        touchingGround = true;
+
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.transform.parent == terrain)
-        {
-            touchingGround = false;
-        }
+
+        touchingGround = false;
+
     }
 }

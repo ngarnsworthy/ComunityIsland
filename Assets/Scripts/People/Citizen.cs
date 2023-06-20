@@ -7,7 +7,7 @@ public class Citizen : MonoBehaviour
     public float speed;
     public CitizenAI AI;
     public Pathfinder.AStarPath pathfinder;
-    [NonSerialized]Rigidbody rigidbody;
+    [NonSerialized] Rigidbody rigidbody;
 
     private void Awake()
     {

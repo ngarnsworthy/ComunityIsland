@@ -1,4 +1,7 @@
-﻿public abstract class CitizenTask
+﻿using System;
+
+[Serializable]
+public abstract class CitizenTask
 {
     public PlacedBuilding building;
     public bool started = false;

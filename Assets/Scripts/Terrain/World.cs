@@ -28,6 +28,44 @@ public class World
             return itemsPrivate;
         }
     }
+
+    public float this[SerializableVector2Int location]
+    {
+        get
+        {
+            SerializableVector2Int cLocation = new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16));
+            if (!chunks.ContainsKey(cLocation))
+            {
+                return 0;
+            }
+            Chunk chunk = chunks[cLocation];
+            if (location.x < 0 && location.y < 0)
+            {
+                SerializableVector2Int loc = new SerializableVector2Int(location.x % 16, location.y % 16) + 16;
+                return chunk.points[loc.x, loc.y];
+            }
+            else if (location.x < 0)
+            {
+                SerializableVector2Int loc = new SerializableVector2Int(16 + (location.x % 16), location.y % 16);
+                return chunk.points[loc.x, loc.y];
+            }
+            else if (location.y < 0)
+            {
+                SerializableVector2Int loc = new SerializableVector2Int(location.x % 16, 16 + (location.y % 16));
+                return chunk.points[loc.x, loc.y];
+            }
+            else
+            {
+                SerializableVector2Int loc = new SerializableVector2Int(location.x % 16, location.y % 16);
+                return chunk.points[loc.x, loc.y];
+            }
+        }
+        set
+        {
+
+        }
+    }
+
     [NonSerialized] private AssetBundle buildingsPrivate;
     [NonSerialized] private AssetBundle itemsPrivate;
     [NonSerialized] public TerrainGen terrainGen; //Callback
@@ -40,7 +78,7 @@ public class World
     public World(int loadingDistance, float scale, int seed)
     {
         NoiseS3D.seed = seed;
-        chunks.Add(new Vector2Int(0, 0), new Chunk(new Vector2Int(0, 0), this, scale));
+        chunks.Add(new Vector2Int(0, 0), new Chunk(new Vector2Int(0, 0), scale));
         this.loadingDistance = loadingDistance;
         this.scale = scale;
         this.seed = seed;
@@ -65,7 +103,7 @@ public class World
             {
                 if (!chunks.ContainsKey(new Vector2Int(x, y)))
                 {
-                    chunks.Add(new Vector2Int(x, y), new Chunk(new Vector2Int(x, y), this, scale));
+                    chunks.Add(new Vector2Int(x, y), new Chunk(new Vector2Int(x, y), scale));
                 }
                 loadedChunks.Add(chunks[new Vector2Int(x, y)]);
             }
@@ -77,6 +115,10 @@ public class World
     {
         SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath + "/" + name, this);
         Debug.Log(Application.persistentDataPath + "/" + name);
+        foreach (Chunk item in chunks.Values)
+        {
+            item.Save();
+        }
     }
 
     public class ChunkLocation
@@ -95,12 +137,12 @@ public class World
 
     public static ChunkLocation ChunkLocationFromPoint(Vector3 point)
     {
-        return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int((int)(point.x / 16), (int)(point.z / 16))], (int)(point.x % 16), (int)(point.z % 16));
+        return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int(((int)point.x / 16), ((int)point.z / 16))], ((int)point.x % 16), ((int)point.z % 16));
     }
 
     public static ChunkLocation ChunkLocationFromPoint(Vector2Int point)
     {
-        return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int((int)(point.x / 16), (int)(point.y / 16))], (int)(point.x % 16), (int)(point.y % 16));
+        return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int(((int)point.x / 16), ((int)point.y / 16))], (int)(point.x % 16), ((int)point.y % 16));
     }
 
     public Vector3 Vector3FromChunkLocation(ChunkLocation point)
@@ -110,6 +152,13 @@ public class World
 
     public float ChunkLocationToHeight(ChunkLocation point)
     {
-        return point.chunk.points[point.x, point.y];
+        try
+        {
+            return point.chunk.points[point.x, point.y];
+        }
+        catch (Exception e)
+        {
+            return 0;
+        }
     }
 }

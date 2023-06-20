@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
+[Serializable]
 public class CitizenAI
 {
     public Citizen citizen;
@@ -10,13 +12,13 @@ public class CitizenAI
 
     public void Update()
     {
-        if(employment == null)
+        if (employment == null)
         {
             Queue<Chunk> chunkQueue = new Queue<Chunk>();
             chunkQueue.Enqueue(TerrainGen.world.GetChunkAtPoint(citizen.gameObject.transform.position));
             List<Chunk> checkedChunks = new List<Chunk>();
             HashSet<Chunk> allChunks = new HashSet<Chunk>();
-            while (employment == null && chunkQueue.Count!=0)
+            while (employment == null && chunkQueue.Count != 0)
             {
                 Chunk chunk = chunkQueue.Dequeue();
                 if (allChunks.Count <= 100)
@@ -67,8 +69,8 @@ public class CitizenAI
         {
             nextBuilding = currentTask.StartTaskLocation(citizen);
             citizen.pathfinder.ClearPath();
-            citizen.pathfinder.start=citizen.transform.position;
-            citizen.pathfinder.end=nextBuilding.gameObject.transform.position;
+            citizen.pathfinder.start = citizen.transform.position;
+            citizen.pathfinder.end = nextBuilding.gameObject.transform.position;
         }
     }
 }

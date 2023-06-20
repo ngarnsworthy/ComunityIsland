@@ -15,7 +15,18 @@ using UnityEngine;
 [System.Serializable]
 public class Chunk
 {
-    World world;
+    World world
+    {
+        get
+        {
+            if (pWorld == null)
+            {
+                pWorld = TerrainGen.world;
+            }
+            return pWorld;
+        }
+    }
+    [NonSerialized] private World pWorld;
     public float[,] points;
     public bool[,] walkable;
     public SerializableVector2Int worldLocation;
@@ -91,10 +102,9 @@ public class Chunk
         }
     }
 
-    public Chunk(Vector2Int location, World world, float scale)
+    public Chunk(Vector2Int location, float scale)
     {
         placedBuildings = new List<PlacedBuilding>();
-        this.world = world;
         worldLocation = location;
 
         walkable = new bool[16, 16];
@@ -182,7 +192,7 @@ public class Chunk
 
     public void AddBuilding(Building building, Vector2Int location, float height)
     {
-        PlacedBuilding newBuilding = new PlacedBuilding(building, location, height, world);
+        PlacedBuilding newBuilding = new PlacedBuilding(building, location, height);
         placedBuildings.Add(newBuilding);
         for (int x = (int)(location.x - (building.footprint.x / 2)); x < (int)location.x + (building.footprint.x / 2); x++)
         {
@@ -207,7 +217,10 @@ public class Chunk
                 walkable[x, y] = false;
             }
         }
-        PlaceBuilding(newBuilding);
+        if (gameObject != null)
+        {
+            PlaceBuilding(newBuilding);
+        }
     }
 
     public void PlaceBuilding(PlacedBuilding building)
@@ -217,5 +230,15 @@ public class Chunk
         gameObject.GetComponent<MeshFilter>().mesh = building.building.levels[building.level].mesh;
 
         gameObject.transform.position = new Vector3(worldLocation.x * 16 + building.location.x, building.height, worldLocation.y * 16 + building.location.y);
+
+        building.Load();
+    }
+
+    public void Save()
+    {
+        foreach (var item in placedBuildings)
+        {
+            item.Save();
+        }
     }
 }
