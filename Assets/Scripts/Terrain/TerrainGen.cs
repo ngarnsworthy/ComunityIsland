@@ -11,7 +11,7 @@ public class TerrainGen : MonoBehaviour
     public string worldName;
     public Transform player;
     [HideInInspector]
-    MeshGenerater meshGenerater;
+    public MeshGenerater meshGenerater;
     MeshFilter meshFilter;
     public Transform chunkLocation;
     public GameObject chunkGameObject;

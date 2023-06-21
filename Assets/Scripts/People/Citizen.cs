@@ -11,13 +11,13 @@ public class Citizen : MonoBehaviour
 
     private void Awake()
     {
-        AI = new CitizenAI();
-        AI.citizen = this;
+        AI = new CitizenAI(this);
         rigidbody = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
+        TerrainGen.terrainGen.meshGenerater.AddChunks(TerrainGen.world.CreateChunks(transform.position));
         AI.Update();
         if (pathfinder != null)
         {

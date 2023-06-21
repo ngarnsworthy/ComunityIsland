@@ -129,13 +129,39 @@ public class Chunk
     public Vector3[] GetPoints()
     {
         Vector3[] returnPoints = new Vector3[17 * 17];
-        for (int x = 0; x < 17; x++)
+        for (int x = 0; x < 16; x++)
         {
-            for (int y = 0; y < 17; y++)
+            for (int y = 0; y < 16; y++)
             {
                 returnPoints[x * 17 + y] = new Vector3(worldLocation.x * 16 + x, points[x, y], worldLocation.y * 16 + y);
             }
         }
+        if (north == null)
+        {
+            world.CreateChunk(new Vector2Int(worldLocation.x, worldLocation.y + 1));
+        }
+        for (int x = 0; x < 17; x++)
+        {
+            returnPoints[x * 17 + 16] = new Vector3(worldLocation.x * 16 + x, north.points[x, 0], worldLocation.y * 16 + 16);
+        }
+
+        if (east == null)
+        {
+            world.CreateChunk(new Vector2Int(worldLocation.x + 1, worldLocation.y));
+        }
+        for (int y = 0; y < 16; y++)
+        {
+            returnPoints[17 * 16 + y] = new Vector3(worldLocation.x * 16 + 17, east.points[0, y], worldLocation.y * 16 + y);
+        }
+
+        if (east == null || east.north == null) 
+        {
+            world.CreateChunk(new Vector2Int(worldLocation.x + 1, worldLocation.y + 1));
+        }
+
+        returnPoints[17 * 16 + 16] = new Vector3(worldLocation.x * 16 + 17, east.north.points[0, 0], worldLocation.y * 16 + 17);
+
+
         return returnPoints;
     }
 
@@ -190,37 +216,51 @@ public class Chunk
         return gameObject;
     }
 
-    public void AddBuilding(Building building, Vector2Int location, float height)
+    public void UpdateChunk()
     {
+        if (gameObject == null)
+        {
+            return;
+        }
+        Mesh mesh = GenerateMesh();
+        gameObject.GetComponent<MeshFilter>().mesh = mesh;
+    }
+
+    public void AddBuilding(Building building, Vector2Int location)
+    {
+        float height = 0;
+
+        for (int x = (int)(location.x - (building.footprint.x / 2)); x < (int)location.x + (building.footprint.x / 2); x++)
+        {
+            for (int y = (int)(location.y - (building.footprint.y / 2)); y < (int)location.y + (building.footprint.y / 2); y++)
+            {
+                SerializableVector2Int setLocation = new SerializableVector2Int(x, y);
+                if (!world.GetWalkable(setLocation))
+                {
+                    return;
+                }
+                height += world[setLocation];
+            }
+        }
+
+        height /= (building.footprint.y * building.footprint.x);
+
         PlacedBuilding newBuilding = new PlacedBuilding(building, location, height);
         placedBuildings.Add(newBuilding);
         for (int x = (int)(location.x - (building.footprint.x / 2)); x < (int)location.x + (building.footprint.x / 2); x++)
         {
             for (int y = (int)(location.y - (building.footprint.y / 2)); y < (int)location.y + (building.footprint.y / 2); y++)
             {
-                if ((y > 16 && x > 16) || (y < 0 && x < 0))
-                {
-
-                    continue;
-                }
-                if (x > 16 || x < 0)
-                {
-
-                    continue;
-                }
-                if (y > 16 || y < 0)
-                {
-
-                    continue;
-                }
-                points[x, y] = height;
-                walkable[x, y] = false;
+                SerializableVector2Int setLocation = new SerializableVector2Int(x, y);
+                world[setLocation] = height;
+                world.SetWalkable(setLocation, false);
             }
         }
         if (gameObject != null)
         {
             PlaceBuilding(newBuilding);
         }
+        world.BuildingBuilt();
     }
 
     public void PlaceBuilding(PlacedBuilding building)
@@ -229,7 +269,7 @@ public class Chunk
 
         gameObject.GetComponent<MeshFilter>().mesh = building.building.levels[building.level].mesh;
 
-        gameObject.transform.position = new Vector3(worldLocation.x * 16 + building.location.x, building.height, worldLocation.y * 16 + building.location.y);
+        gameObject.transform.position = new Vector3(building.location.x, building.height, building.location.y);
 
         building.Load();
     }

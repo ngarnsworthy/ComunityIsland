@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class MeshGenerater
 {
@@ -28,6 +29,10 @@ public class MeshGenerater
         while (true)
         {
             List<Chunk> chunks = world.CreateChunks(player.position);
+            foreach (var item in world.citizens)
+            {
+                chunks.AddRange(world.CreateChunks(item.citizen.transform.position));
+            }
             for (int i = 0; i < chunkLocation.childCount; i++)
             {
                 Transform item = chunkLocation.GetChild(i);
@@ -47,6 +52,22 @@ public class MeshGenerater
                 }
             }
             yield return new WaitForEndOfFrame();
+        }
+    }
+
+    public void AddChunk(Chunk chunk)
+    {
+        if (!loadedChunks.Contains(chunk))
+        {
+            neededChunks.Enqueue(chunk);
+        }
+    }
+
+    public void AddChunks(List<Chunk> chunk)
+    {
+        foreach (var item in chunk)
+        {
+            AddChunk(item);
         }
     }
 

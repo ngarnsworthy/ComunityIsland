@@ -38,6 +38,17 @@ public class @DefaultInput : IInputActionCollection, IDisposable
                     ""action"": ""Spawn"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""67b0a3f7-33a7-470e-8ca6-dd8df762d48f"",
+                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Spawn"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -200,6 +211,14 @@ public class @DefaultInput : IInputActionCollection, IDisposable
                     ""type"": ""Value"",
                     ""id"": ""beac602e-f5c0-42b7-a3f6-3e38a8c82ebc"",
                     ""expectedControlType"": ""Axis"",
+                    ""processors"": ""Clamp(min=-1,max=1)"",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Edit Building"",
+                    ""type"": ""Button"",
+                    ""id"": ""b72b56c0-0cc6-45ec-936e-c644587ad13d"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 }
@@ -252,7 +271,7 @@ public class @DefaultInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""negative"",
                     ""id"": ""db4c2910-4dbb-44fa-97a7-bf551afe3c9f"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -263,13 +282,35 @@ public class @DefaultInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""positive"",
                     ""id"": ""49ff883e-8471-4faf-b921-b33dd7735d21"",
-                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Select Building"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""15811eb7-8b0b-4895-974e-26c6d731f078"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Edit Building"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4248bae8-d148-4e41-b15e-bcfd9afb6ef2"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Edit Building"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -316,6 +357,7 @@ public class @DefaultInput : IInputActionCollection, IDisposable
         m_Control = asset.FindActionMap("Control", throwIfNotFound: true);
         m_Control_PlaceBuilding = m_Control.FindAction("Place Building", throwIfNotFound: true);
         m_Control_SelectBuilding = m_Control.FindAction("Select Building", throwIfNotFound: true);
+        m_Control_EditBuilding = m_Control.FindAction("Edit Building", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -449,12 +491,14 @@ public class @DefaultInput : IInputActionCollection, IDisposable
     private IControlActions m_ControlActionsCallbackInterface;
     private readonly InputAction m_Control_PlaceBuilding;
     private readonly InputAction m_Control_SelectBuilding;
+    private readonly InputAction m_Control_EditBuilding;
     public struct ControlActions
     {
         private @DefaultInput m_Wrapper;
         public ControlActions(@DefaultInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @PlaceBuilding => m_Wrapper.m_Control_PlaceBuilding;
         public InputAction @SelectBuilding => m_Wrapper.m_Control_SelectBuilding;
+        public InputAction @EditBuilding => m_Wrapper.m_Control_EditBuilding;
         public InputActionMap Get() { return m_Wrapper.m_Control; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -470,6 +514,9 @@ public class @DefaultInput : IInputActionCollection, IDisposable
                 @SelectBuilding.started -= m_Wrapper.m_ControlActionsCallbackInterface.OnSelectBuilding;
                 @SelectBuilding.performed -= m_Wrapper.m_ControlActionsCallbackInterface.OnSelectBuilding;
                 @SelectBuilding.canceled -= m_Wrapper.m_ControlActionsCallbackInterface.OnSelectBuilding;
+                @EditBuilding.started -= m_Wrapper.m_ControlActionsCallbackInterface.OnEditBuilding;
+                @EditBuilding.performed -= m_Wrapper.m_ControlActionsCallbackInterface.OnEditBuilding;
+                @EditBuilding.canceled -= m_Wrapper.m_ControlActionsCallbackInterface.OnEditBuilding;
             }
             m_Wrapper.m_ControlActionsCallbackInterface = instance;
             if (instance != null)
@@ -480,6 +527,9 @@ public class @DefaultInput : IInputActionCollection, IDisposable
                 @SelectBuilding.started += instance.OnSelectBuilding;
                 @SelectBuilding.performed += instance.OnSelectBuilding;
                 @SelectBuilding.canceled += instance.OnSelectBuilding;
+                @EditBuilding.started += instance.OnEditBuilding;
+                @EditBuilding.performed += instance.OnEditBuilding;
+                @EditBuilding.canceled += instance.OnEditBuilding;
             }
         }
     }
@@ -516,5 +566,6 @@ public class @DefaultInput : IInputActionCollection, IDisposable
     {
         void OnPlaceBuilding(InputAction.CallbackContext context);
         void OnSelectBuilding(InputAction.CallbackContext context);
+        void OnEditBuilding(InputAction.CallbackContext context);
     }
 }

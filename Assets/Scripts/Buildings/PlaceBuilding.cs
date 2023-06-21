@@ -27,7 +27,7 @@ public class PlaceBuilding : MonoBehaviour
                 Vector2Int rayChunk = new Vector2Int((int)(location.x / 16), (int)(location.z / 16));
                 Debug.Log(TerrainGen.world.chunks[rayChunk]);
                 Chunk chunk = TerrainGen.world.chunks[rayChunk];
-                chunk.AddBuilding(placedBuilding, new Vector2Int((int)location.x % 16, (int)location.z % 16), location.y);
+                chunk.AddBuilding(placedBuilding, new Vector2Int((int)location.x, (int)location.z));
             }
         }
     }

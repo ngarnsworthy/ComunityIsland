@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3433063155
+CRC: 2404874880
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 2342741464591763e9aa00557e939c32
+    Hash: bbdff3a01fd974887f021109b9ec4767
   TypeTreeHash:
     serializedVersion: 2
     Hash: e701dbea9f6df473da042c478d9a21e3
@@ -22,6 +22,5 @@ ClassTypes:
 SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Buildings/House.asset
-- Assets/Buildings/ItemSupply_DEBUG.asset
-- Assets/Buildings/ItemSink_DEBUG.asset
+- Assets/Buildings/DEBUG.asset
 Dependencies: []

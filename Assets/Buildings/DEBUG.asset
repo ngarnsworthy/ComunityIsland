@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b458810011052d44bad7b0447898e590, type: 3}
-  m_Name: ItemSink_DEBUG
+  m_Name: DEBUG
   m_EditorClassIdentifier: 
   levels:
-  - mesh: {fileID: -5495902117074765545, guid: ff46bbd1f9ab5b74b949b10d977f3021, type: 3}
-    maxWorkers: 4
-  footprint: {x: 2, y: 2}
+  - mesh: {fileID: -462981019419857548, guid: e04f118ff7ea4a340895858965ac2639, type: 3}
+    maxWorkers: 10
+  footprint: {x: 4, y: 4}
+  sprite: {fileID: 21300000, guid: 9aebd705574f9e642aef1e5f59b3e4d8, type: 3}

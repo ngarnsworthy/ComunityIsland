@@ -3,13 +3,18 @@ using UnityEngine.InputSystem;
 
 public class DEBUG : MonoBehaviour
 {
-    public InputActionAsset inputActions;
     [Header("Spawn")]
+    public InputActionReference spawnInput;
     public string spawnActionName;
     public GameObject citizen;
+
+    private void Start()
+    {
+        spawnInput.action.Enable();
+    }
     void Update()
     {
-        if (inputActions.FindAction(spawnActionName).triggered)
+        if (spawnInput.action.triggered)
             Instantiate(citizen);
     }
 

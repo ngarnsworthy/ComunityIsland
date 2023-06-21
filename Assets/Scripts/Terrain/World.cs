@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -33,37 +34,35 @@ public class World
     {
         get
         {
-            SerializableVector2Int cLocation = new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16));
-            if (!chunks.ContainsKey(cLocation))
+            try
+            {
+                return chunks[new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16))].points[(location.x % 16 + 16) % 16, (location.y % 16 + 16) % 16];
+            }
+            catch
             {
                 return 0;
             }
-            Chunk chunk = chunks[cLocation];
-            if (location.x < 0 && location.y < 0)
-            {
-                SerializableVector2Int loc = new SerializableVector2Int(location.x % 16, location.y % 16) + 16;
-                return chunk.points[loc.x, loc.y];
-            }
-            else if (location.x < 0)
-            {
-                SerializableVector2Int loc = new SerializableVector2Int(16 + (location.x % 16), location.y % 16);
-                return chunk.points[loc.x, loc.y];
-            }
-            else if (location.y < 0)
-            {
-                SerializableVector2Int loc = new SerializableVector2Int(location.x % 16, 16 + (location.y % 16));
-                return chunk.points[loc.x, loc.y];
-            }
-            else
-            {
-                SerializableVector2Int loc = new SerializableVector2Int(location.x % 16, location.y % 16);
-                return chunk.points[loc.x, loc.y];
-            }
+
         }
         set
         {
-
+            try
+            {
+                chunks[new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16))].points[(location.x % 16 + 16) % 16, (location.y % 16 + 16) % 16] = value;
+            }
+            catch
+            { }
         }
+    }
+
+    public bool GetWalkable(SerializableVector2Int location)
+    {
+        return chunks[new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16))].walkable[(location.x % 16 + 16) % 16, (location.y % 16 + 16) % 16];
+    }
+
+    public void SetWalkable(SerializableVector2Int location, bool value)
+    {
+        chunks[new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16))].walkable[(location.x % 16 + 16) % 16, (location.y % 16 + 16) % 16] = value;
     }
 
     [NonSerialized] private AssetBundle buildingsPrivate;
@@ -73,10 +72,16 @@ public class World
     public string name = "World";
     public float scale;
     public int loadingDistance;
-    public Dictionary<SerializableVector2Int, Chunk> chunks = new Dictionary<SerializableVector2Int, Chunk>();
+    public Dictionary<SerializableVector2Int, Chunk> chunks;
+
+    public List<CitizenAI> unemployedCitizenAIs;
+    public List<CitizenAI> citizens;
 
     public World(int loadingDistance, float scale, int seed)
     {
+        citizens = new List<CitizenAI>();
+        unemployedCitizenAIs = new List<CitizenAI>();
+        chunks = new Dictionary<SerializableVector2Int, Chunk>();
         NoiseS3D.seed = seed;
         chunks.Add(new Vector2Int(0, 0), new Chunk(new Vector2Int(0, 0), scale));
         this.loadingDistance = loadingDistance;
@@ -84,13 +89,24 @@ public class World
         this.seed = seed;
     }
 
+    public void BuildingBuilt()
+    {
+        foreach (var item in unemployedCitizenAIs.ToList())
+        {
+            if (item.UpdateBuilding())
+            {
+                unemployedCitizenAIs.Remove(item);
+            }
+        }
+    }
+
     public Chunk GetChunkAtPoint(Vector3 location)
     {
-        if (chunks.ContainsKey(new Vector2Int((int)(location.x / 16), (int)(location.z / 16))))
+        if (!chunks.ContainsKey(new Vector2Int((int)(location.x / 16), (int)(location.z / 16))))
         {
-            return chunks[new Vector2Int((int)(location.x / 16), (int)(location.z / 16))];
+            CreateChunks(location);
         }
-        return null;
+        return chunks[new Vector2Int((int)(location.x / 16), (int)(location.z / 16))];
     }
 
     public List<Chunk> CreateChunks(Vector3 playerLocation)
@@ -109,6 +125,21 @@ public class World
             }
         }
         return loadedChunks;
+    }
+
+    public Chunk CreateChunk(Vector2Int location)
+    {
+        Chunk chunk;
+        if (!chunks.ContainsKey(location))
+        {
+            chunk = new Chunk(location, scale);
+            chunks.Add(location, chunk);
+        }
+        else
+        {
+            chunk = chunks[location];
+        }
+        return chunk;
     }
 
     public void Save()

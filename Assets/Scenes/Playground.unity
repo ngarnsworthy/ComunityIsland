@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera: {fileID: 451723693}
-  placedBuilding: {fileID: 11400000, guid: 033e3d9716804cd4a8f1d4f85125f0f8, type: 2}
+  placedBuilding: {fileID: 11400000, guid: fe7ef7a663e1a4f77bcf3adc97722b89, type: 2}
   placeBuilding: {fileID: -4693955350089219042, guid: 13fb4ccafcb750b4c803b0325fb11f53,
     type: 3}
 --- !u!4 &126493157
@@ -1664,7 +1664,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1207834b9960e69419daeecd78f1c811, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActions: {fileID: -944628639613478452, guid: 13fb4ccafcb750b4c803b0325fb11f53,
+  spawnInput: {fileID: -7164019928519898951, guid: 13fb4ccafcb750b4c803b0325fb11f53,
     type: 3}
   spawnActionName: Spawn
   citizen: {fileID: 1781899113745326723, guid: 81c6493198103d449b3702ae3cba3a89, type: 3}

@@ -13,6 +13,7 @@ public class BuildingPicker : MonoBehaviour
     public GameObject buildingPickerSlot;
     public GameObject firstBuildingPickerSlot;
     List<GameObject> buildingPickerSlots = new List<GameObject>();
+    List<Building> buildings = new List<Building>();
 
     int buildingPickerSlotIndex = 0;
 
@@ -37,6 +38,7 @@ public class BuildingPicker : MonoBehaviour
 
             Transform child = buildingPickerSlots[i].transform.GetChild(0);
 
+            buildings.Add(TerrainGen.world.buildings.LoadAsset<Building>(buildingAssets[i]));
             child.GetComponent<Image>().sprite = TerrainGen.world.buildings.LoadAsset<Building>(buildingAssets[i]).sprite;
         }
     }
@@ -45,14 +47,18 @@ public class BuildingPicker : MonoBehaviour
     {
         buildingPickerSlotIndex += (int)changeSelection.action.ReadValue<float>();
 
+        Debug.Log((int)changeSelection.action.ReadValue<float>());
+
         if (buildingPickerSlotIndex < 0)
         {
-            buildingPickerSlotIndex = Mathf.Abs(3 - (buildingPickerSlotIndex % buildingPickerSlots.Count));
+            buildingPickerSlotIndex = Mathf.Abs(3 - (buildingPickerSlotIndex % buildingPickerSlots.Count - 1));
         }
 
-        if (buildingPickerSlotIndex > buildingPickerSlots.Count)
+        if (buildingPickerSlotIndex > buildingPickerSlots.Count - 1)
         {
-            buildingPickerSlotIndex %= buildingPickerSlots.Count;
+            buildingPickerSlotIndex %= buildingPickerSlots.Count - 1;
         }
+
+        buildingPlacer.placedBuilding = buildings[buildingPickerSlotIndex];
     }
 }
