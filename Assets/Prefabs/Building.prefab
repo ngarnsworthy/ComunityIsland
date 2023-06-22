@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5947727373545865656}
   - component: {fileID: 5947727373545865655}
   - component: {fileID: 9044001134839728202}
+  - component: {fileID: 843209957465813309}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -29,7 +30,6 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 12.351273, y: -25.751678, z: 5.1628113}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,6 +95,25 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 4
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &843209957465813309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5947727373545865653}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edcb0f7bd871a1041bdd6350bb7d28c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  placedBuilding:
+    buildingName: 
+    location:
+      x: 0
+      y: 0
+    level: 0
+    height: 0

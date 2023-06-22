@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class MeshGenerater
 {
@@ -46,7 +45,7 @@ public class MeshGenerater
             }
             foreach (var item in chunks)
             {
-                if (!loadedChunks.Contains(item))
+                if (!loadedChunks.Contains(item) && !neededChunks.Contains(item))
                 {
                     neededChunks.Enqueue(item);
                 }

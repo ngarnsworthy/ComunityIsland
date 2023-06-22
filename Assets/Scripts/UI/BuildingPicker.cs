@@ -47,8 +47,6 @@ public class BuildingPicker : MonoBehaviour
     {
         buildingPickerSlotIndex += (int)changeSelection.action.ReadValue<float>();
 
-        Debug.Log((int)changeSelection.action.ReadValue<float>());
-
         if (buildingPickerSlotIndex < 0)
         {
             buildingPickerSlotIndex = Mathf.Abs(3 - (buildingPickerSlotIndex % buildingPickerSlots.Count - 1));

@@ -267,9 +267,14 @@ public class Chunk
     {
         GameObject gameObject = GameObject.Instantiate(world.terrainGen.buildingPrefab, this.gameObject.transform);
 
-        gameObject.GetComponent<MeshFilter>().mesh = building.building.levels[building.level].mesh;
+        gameObject.GetComponent<MeshFilter>().sharedMesh = building.building.levels[building.level].mesh;
+
+        gameObject.GetComponent<MeshCollider>().sharedMesh = building.building.levels[building.level].mesh;
 
         gameObject.transform.position = new Vector3(building.location.x, building.height, building.location.y);
+        gameObject.transform.rotation = Quaternion.Euler(building.building.levels[building.level].rotation);
+
+        building.gameObject = gameObject;
 
         building.Load();
     }

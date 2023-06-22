@@ -11,6 +11,7 @@ public class PlacedBuilding
     public List<ItemStack> items;
     public Queue<CitizenTask> tasks;
     [NonSerialized] private Building buildingPrivate;
+    [NonSerialized] PlacedBuildingComponent placedBuildingComponent;
     public Building building
     {
         get
@@ -57,6 +58,7 @@ public class PlacedBuilding
 
     public void Load()
     {
+        placedBuildingComponent = gameObject.GetComponent<PlacedBuildingComponent>();
         foreach (var item in citizenAIList)
         {
             GameObject.Instantiate(TerrainGen.terrainGen.citizenPrefab).GetComponent<Citizen>().AI = item;

@@ -7,6 +7,7 @@ public class Building : ScriptableObject
     public class Level
     {
         public Mesh mesh;
+        public Vector3 rotation;
         public int maxWorkers;
     }
     public Level[] levels;

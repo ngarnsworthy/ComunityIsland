@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: DEBUG
   m_EditorClassIdentifier: 
   levels:
-  - mesh: {fileID: -462981019419857548, guid: e04f118ff7ea4a340895858965ac2639, type: 3}
-    maxWorkers: 10
+  - mesh: {fileID: -2432090755550338912, guid: ffa7f31baff18994b8a03339ae354600, type: 3}
+    rotation: {x: 90, y: 90, z: 0}
+    maxWorkers: 5
   footprint: {x: 4, y: 4}
   sprite: {fileID: 21300000, guid: 9aebd705574f9e642aef1e5f59b3e4d8, type: 3}
