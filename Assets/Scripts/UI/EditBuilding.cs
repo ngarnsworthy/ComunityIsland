@@ -8,6 +8,8 @@ public class EditBuilding : MonoBehaviour
     public Camera camera;
     [Header("Input")]
     public InputActionReference openBuilding;
+    [Header("UI")]
+    public Menu editMenu;
 
     PlacedBuilding building;
 
@@ -32,7 +34,7 @@ public class EditBuilding : MonoBehaviour
                     if (building != null)
                     {
                         this.building = building;
-                        Debug.Log(building);
+                        editMenu.Show();
                     }
                 }
             }
