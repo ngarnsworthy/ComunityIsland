@@ -7,7 +7,7 @@ public class PlacedBuilding
 {
     [NonSerialized] public GameObject gameObject;
     List<CitizenAI> citizenAIList;
-    [NonSerialized] public List<Citizen> workers;
+    [NonSerialized]public List<Citizen> workers;
     public List<ItemStack> items;
     public Queue<CitizenTask> tasks;
     [NonSerialized] private Building buildingPrivate;
@@ -62,6 +62,7 @@ public class PlacedBuilding
         foreach (var item in citizenAIList)
         {
             GameObject.Instantiate(TerrainGen.terrainGen.citizenPrefab).GetComponent<Citizen>().AI = item;
+            item.employment = this;
         }
     }
 

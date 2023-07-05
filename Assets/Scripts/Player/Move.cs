@@ -1,3 +1,4 @@
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,6 +15,23 @@ public class Move : MonoBehaviour
     public float speed;
     public float jumpForce;
 
+    [Header("Camera")]
+    public CinemachineVirtualCamera virtualCamera;
+
+    public bool running
+    {
+        get
+        {
+            return pRunning;
+        }
+        set
+        {
+            pRunning = value;
+            virtualCamera.enabled = value;
+        }
+    }
+    bool pRunning = true;
+
     bool touchingGround = false;
 
     Rigidbody rigidbody;
@@ -27,6 +45,9 @@ public class Move : MonoBehaviour
 
     void Update()
     {
+        if (!running) {
+            return;
+        }
         Vector2 movement = xy.action.ReadValue<Vector2>();
         movement *= (Time.deltaTime * speed);
 
@@ -68,13 +89,11 @@ public class Move : MonoBehaviour
     {
 
         touchingGround = true;
-
     }
 
     private void OnCollisionExit(Collision collision)
     {
 
         touchingGround = false;
-
     }
 }

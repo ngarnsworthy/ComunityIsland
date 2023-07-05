@@ -7,8 +7,8 @@ public class CitizenAI
     [NonSerialized]public Citizen citizen;
     public Queue<CitizenTask> tasks;
     public CitizenTask currentTask;
-    public PlacedBuilding employment;
-    PlacedBuilding nextBuilding;
+    [NonSerialized] public PlacedBuilding employment;
+    [NonSerialized] PlacedBuilding nextBuilding;
 
     public CitizenAI(Citizen citizen) 
     {

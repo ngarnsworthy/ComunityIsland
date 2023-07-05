@@ -10,6 +10,8 @@ public class EditBuilding : MonoBehaviour
     public InputActionReference openBuilding;
     [Header("UI")]
     public Menu editMenu;
+    [Header("Player")]
+    public Move player;
 
     PlacedBuilding building;
 
@@ -35,6 +37,7 @@ public class EditBuilding : MonoBehaviour
                     {
                         this.building = building;
                         editMenu.Show();
+                        player.enabled = false;
                     }
                 }
             }
