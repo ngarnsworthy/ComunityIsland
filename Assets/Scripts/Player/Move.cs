@@ -27,7 +27,6 @@ public class Move : MonoBehaviour
         set
         {
             pRunning = value;
-            virtualCamera.enabled = value;
         }
     }
     bool pRunning = true;
@@ -95,5 +94,15 @@ public class Move : MonoBehaviour
     {
 
         touchingGround = false;
+    }
+
+    private void OnEnable()
+    {
+        virtualCamera.enabled = true;
+    }
+
+    private void OnDisable()
+    {
+        virtualCamera.enabled = false;
     }
 }

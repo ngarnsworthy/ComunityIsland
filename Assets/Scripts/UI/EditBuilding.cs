@@ -7,13 +7,15 @@ public class EditBuilding : MonoBehaviour
     [Header("Raycast")]
     public Camera camera;
     [Header("Input")]
-    public InputActionReference openBuilding;
+    [SerializeField]
+    InputActionReference openBuilding;
     [Header("UI")]
     public Menu editMenu;
     [Header("Player")]
     public Move player;
 
-    PlacedBuilding building;
+    [HideInInspector]
+    public PlacedBuilding selectedBuilding;
 
     private void Start()
     {
@@ -35,7 +37,7 @@ public class EditBuilding : MonoBehaviour
                     PlacedBuilding building = component.placedBuilding;
                     if (building != null)
                     {
-                        this.building = building;
+                        selectedBuilding = building;
                         editMenu.Show();
                         player.enabled = false;
                     }

@@ -18,18 +18,18 @@ public class PlacedBuilding
         {
             if (buildingPrivate == null)
             {
-                buildingPrivate = world.buildings.LoadAsset<Building>(buildingName);
+                buildingPrivate = world.buildings.LoadAsset<Building>(buildingType);
             }
             return buildingPrivate;
         }
         set
         {
             buildingPrivate = value;
-            buildingName = value.name;
+            buildingType = value.name;
         }
     }
 
-    public string buildingName;
+    public string buildingType;
     public SerializableVector2Int location;
     public int level;
     public float height;
@@ -59,6 +59,7 @@ public class PlacedBuilding
     public void Load()
     {
         placedBuildingComponent = gameObject.GetComponent<PlacedBuildingComponent>();
+        placedBuildingComponent.placedBuilding = this;
         foreach (var item in citizenAIList)
         {
             GameObject.Instantiate(TerrainGen.terrainGen.citizenPrefab).GetComponent<Citizen>().AI = item;
@@ -73,5 +74,10 @@ public class PlacedBuilding
         {
             citizenAIList.Add(item.AI);
         }
+    }
+
+    public void Update()
+    {
+
     }
 }

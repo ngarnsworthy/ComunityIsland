@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class MoveTask : CitizenTask
 {
+    public override string Name
+    {
+        get { return "Moving Items"; }
+    } 
     Item itemToGet;
     int count;
-    public List<PlacedBuilding> buildingsToVisit = new List<PlacedBuilding>();
     public MoveTask(PlacedBuilding building, Item itemToGet, int count) : base(building)
     {
         this.itemToGet = itemToGet;
