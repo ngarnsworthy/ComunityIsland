@@ -283,7 +283,7 @@ public class Chunk
     {
         foreach (var item in placedBuildings)
         {
-            item.Save();
+            item.UpdateCitizenAIList();
         }
     }
 }

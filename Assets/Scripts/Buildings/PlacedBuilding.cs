@@ -8,7 +8,8 @@ public class PlacedBuilding
     [NonSerialized] public GameObject gameObject;
     List<CitizenAI> citizenAIList;
     [NonSerialized]public List<Citizen> workers;
-    public List<ItemStack> items;
+    public List<ItemStack> items = new List<ItemStack>();
+    public List<ItemStack> usedItems;
     public Queue<CitizenTask> tasks;
     [NonSerialized] private Building buildingPrivate;
     [NonSerialized] PlacedBuildingComponent placedBuildingComponent;
@@ -67,7 +68,7 @@ public class PlacedBuilding
         }
     }
 
-    public void Save()
+    public void UpdateCitizenAIList()
     {
         citizenAIList.Clear();
         foreach (var item in workers)
@@ -78,6 +79,23 @@ public class PlacedBuilding
 
     public void Update()
     {
-
+        foreach(CitizenAI citizen in citizenAIList)
+        {
+            if(citizen.currentTask == null && building.levels[level].createsItems)
+            {
+                citizen.currentTask = new CreateTask(this, new ItemStack(building.levels[level].createdItem, (int)building.levels[level].itemsPerSecond));
+            }
+            if(citizen.currentTask is CreateTask task)
+            {
+                if (items.Contains(task.createdItem))
+                {
+                    items.Find((value) => { return value == task.createdItem; }).stackSize += task.createdItem.stackSize;
+                }
+                else
+                {
+                    items.Add(task.createdItem);
+                }
+            }
+        }
     }
 }

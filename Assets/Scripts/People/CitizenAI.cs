@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CitizenAI
 {
     [NonSerialized]public Citizen citizen;
-    public Queue<CitizenTask> tasks;
+    public Queue<CitizenTask> tasks = new Queue<CitizenTask>();
     public CitizenTask currentTask;
     [NonSerialized] public PlacedBuilding employment;
     [NonSerialized] public PlacedBuilding nextBuilding;
@@ -14,7 +14,6 @@ public class CitizenAI
     {
         TerrainGen.world.citizens.Add(this);
         this.citizen = citizen;
-        tasks = new Queue<CitizenTask>();
         UpdateBuilding();
         if(employment == null)
         {
@@ -36,9 +35,23 @@ public class CitizenAI
         {
             currentTask = tasks.Dequeue();
         }
+        if (currentTask!=null&&!currentTask.priority && tasks.Count != 0)
+        {
+            while (!tasks.ToArray()[tasks.Count-1].priority)
+            {
+                tasks.Enqueue(tasks.Dequeue());
+            }
+            currentTask.started = false;
+            tasks.Enqueue(currentTask);
+            currentTask = tasks.Dequeue();
+        }
         if (currentTask!=null&&!currentTask.started)
         {
             nextBuilding = currentTask.StartTaskLocation(citizen);
+            if(citizen.pathfinder == null)
+            {
+                citizen.pathfinder = new Pathfinder.AStarPath();
+            }
             citizen.pathfinder.ClearPath();
             citizen.pathfinder.start = citizen.transform.position;
             citizen.pathfinder.end = nextBuilding.gameObject.transform.position;
@@ -83,6 +96,7 @@ public class CitizenAI
                 if (building.building.levels[building.level].maxWorkers > building.workers.Count)
                 {
                     building.workers.Add(citizen);
+                    building.UpdateCitizenAIList();
                     employment = building;
                 }
             }

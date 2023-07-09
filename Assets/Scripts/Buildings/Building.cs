@@ -9,6 +9,9 @@ public class Building : ScriptableObject
         public Mesh mesh;
         public Vector3 rotation;
         public int maxWorkers;
+        public bool createsItems;
+        public Item createdItem;
+        public float itemsPerSecond;
     }
     public Level[] levels;
     public Vector2 footprint;

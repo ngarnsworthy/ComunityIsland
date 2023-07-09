@@ -1,18 +1,20 @@
 ManifestFileVersion: 0
-CRC: 2210293655
+CRC: 53415967
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3d178ba7585bbff2745136d5242fb51c
+    Hash: 6419b64ac7c37184d9029f983eafe8f8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: b86d7845e88b88f553572605c964dace
+    Hash: cdc4b16e505bc2bb98ad74b196246533
 HashAppended: 0
 ClassTypes:
 - Class: 28
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: c56aecf902b0c4780a0bd355d0121516, type: 3}
 - Class: 114
   Script: {fileID: 11500000, guid: b458810011052d44bad7b0447898e590, type: 3}
 - Class: 115
@@ -23,4 +25,5 @@ SerializeReferenceClassIdentifiers: []
 Assets:
 - Assets/Buildings/House.asset
 - Assets/Buildings/DEBUG.asset
-Dependencies: []
+Dependencies:
+- /Users/nickgarnsworthy/Community World/Assets/StreamingAssets/items

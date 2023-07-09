@@ -11,7 +11,7 @@ public static class ItemLocator
         chunkQueue.Enqueue(TerrainGen.world.GetChunkAtPoint(location));
         List<Chunk> checkedChunks = new List<Chunk>();
         HashSet<Chunk> allChunks = new HashSet<Chunk>();
-        while (foundItems < count)
+        while (foundItems <= count)
         {
             Chunk chunk = chunkQueue.Dequeue();
             if (allChunks.Count <= 1000)
@@ -46,7 +46,20 @@ public static class ItemLocator
                 if (foundItemStack != null)
                 {
                     buildings.Add(building);
-                    foundItems += foundItemStack.stackSize;
+                    int addedCount = count - foundItems;
+                    if(addedCount > foundItemStack.stackSize)
+                    {
+                        addedCount = foundItemStack.stackSize;
+                    }
+                    if(building.usedItems.Contains(foundItemStack)){
+                        building.usedItems.Find((value) => { return value.Equals(foundItemStack); }).stackSize += addedCount;
+                    }
+                    else
+                    {
+                        building.usedItems.Add(new ItemStack(item, addedCount));
+                    }
+                    foundItems += addedCount;
+                    foundItemStack.stackSize -= addedCount;
                 }
             }
         }
