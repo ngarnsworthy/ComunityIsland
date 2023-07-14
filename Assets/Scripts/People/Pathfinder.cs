@@ -1,110 +1,21 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Utils;
+using static UnityEngine.Rendering.DebugUI;
 
 public class Pathfinder
 {
-    public class AStarPoint
-    {
+    public class AStarPoint : IComparable<AStarPoint>{
         public AStarPath path;
-        public Vector3 position;
         public AStarPoint parent;
+        public Vector3 position;
 
-        World.ChunkLocation chunkLocation;
-
-        public AStarPoint(AStarPath path, Vector3 position, AStarPoint parent)
+        public int CompareTo(AStarPoint other)
         {
-            this.path = path;
+            if (other == null) return 1;
 
-            this.position = position;
-
-            chunkLocation = World.ChunkLocationFromPoint(position);
-
-            this.parent = parent;
-
-            if (parent != null)
-            {
-                gCost = parent.gCost + Vector3.Distance(parent.position, position);
-            }
-            else
-            {
-                gCost = 0;
-            }
-            hCost = Vector3.Distance(position, path.end);
-        }
-
-        public float fCost
-        {
-            get
-            {
-                return hCost + gCost;
-            }
-        }
-
-        public float gCost;
-
-        public float hCost;
-
-        public bool walkable
-        {
-            get
-            {
-                return chunkLocation.chunk.walkable[chunkLocation.x, chunkLocation.y];
-            }
-        }
-
-        public AStarPoint[] neighbours
-        {
-            get
-            {
-                if (pNeighbours == null)
-                {
-                    AStarPoint[] newNeighbours = new AStarPoint[4];
-
-                    World.ChunkLocation neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x + 1, chunkLocation.y));
-                    newNeighbours[0] = new AStarPoint(path, TerrainGen.world.Vector3FromChunkLocation(neighboursChunkLocation), this);
-                    neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x - 1, chunkLocation.y));
-                    newNeighbours[1] = new AStarPoint(path, TerrainGen.world.Vector3FromChunkLocation(neighboursChunkLocation), this);
-                    neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x, chunkLocation.y + 1));
-                    newNeighbours[2] = new AStarPoint(path, TerrainGen.world.Vector3FromChunkLocation(neighboursChunkLocation), this);
-                    neighboursChunkLocation = World.ChunkLocationFromPoint(new Vector2Int(chunkLocation.x, chunkLocation.y - 1));
-                    newNeighbours[3] = new AStarPoint(path, TerrainGen.world.Vector3FromChunkLocation(neighboursChunkLocation), this);
-
-                    for (int i = 0; i < newNeighbours.Length; i++)
-                    {
-                        AStarPoint item = newNeighbours[i];
-                        if (path.openSet.Contains(item))
-                        {
-                            newNeighbours[i] = path.openSet.Find((e) => item == e);
-                        }
-                        else if (path.closedSet.Contains(item))
-                        {
-                            newNeighbours[i] = null;
-                        }
-                    }
-                    pNeighbours = newNeighbours;
-                }
-                return pNeighbours;
-            }
-        }
-
-        public AStarPoint[] pNeighbours;
-
-        public void AddNeighbours()
-        {
-            foreach (AStarPoint neighbour in neighbours)
-            {
-                if (!neighbour.walkable) continue;
-
-                float newMovementCostToNeighbour = gCost + Vector3.Distance(position, neighbour.position);
-                if (newMovementCostToNeighbour < neighbour.gCost || !path.openSet.Contains(neighbour))
-                {
-                    neighbour.gCost = newMovementCostToNeighbour;
-                    neighbour.parent = this;
-
-                    if (!path.openSet.Contains(neighbour))
-                        path.openSet.Add(neighbour);
-                }
-            }
+            return f.CompareTo(other.f);
         }
 
         public override bool Equals(object obj)
@@ -117,76 +28,83 @@ public class Pathfinder
         {
             return 1206833562 + position.GetHashCode();
         }
+
+        public float f
+        {
+            get
+            {
+                return g + h;
+            }
+        }
+
+        public float g
+        {
+            get
+            {
+                AStarPoint point = this;
+                float cost = 0;
+                while (point.parent != null)
+                {
+                    cost += Vector3.Distance(point.position, point.parent.position);
+                    point = point.parent;
+                }
+                return cost;
+            }
+        }
+
+        public float h
+        {
+            get
+            {
+                return Vector3.Distance(position, path.end);
+            }
+        }
+
+        public AStarPoint(AStarPath path, AStarPoint parent, Vector3 position)
+        {
+            this.path = path;
+            this.parent = parent;
+            this.position = position;
+        }
     }
     public class AStarPath
     {
         public Vector3 start;
         public Vector3 end;
-        public AStarPoint startPoint;
-        public AStarPoint endPoint;
-        public List<AStarPoint> openSet = new List<AStarPoint>();
+
+        public PriorityQueue<AStarPoint, AStarPoint> openSet = new PriorityQueue<AStarPoint, AStarPoint>();
         public HashSet<AStarPoint> closedSet = new HashSet<AStarPoint>();
 
-        public List<AStarPoint> path
+        public List<AStarPoint> Path
         {
             get
             {
-                if (pPath == null)
+                if(_path == null)
                 {
-                    startPoint = new AStarPoint(this, start, null);
-                    openSet.Add(startPoint);
+                    _path = new List<AStarPoint>();
+                    AStarPoint point = new AStarPoint(this, null, start);
+                    Path.Add(point);
+                    closedSet.Add(point);
 
-                    while (openSet.Count > 0)
+                    while(Vector3.Distance(point.position, end) >= 5)
                     {
-                        AStarPoint currentNode = openSet[0];
-                        for (int i = 1; i < openSet.Count; i++)
+                        List<AStarPoint> neighbors = new List<AStarPoint>();
+
+                        neighbors.Add(new AStarPoint(this, point, new Vector3(point.position.x+1, point.position.y, point.position.z)));
+                        neighbors.Add(new AStarPoint(this, point, new Vector3(point.position.x, point.position.y+1, point.position.z)));
+                        neighbors.Add(new AStarPoint(this, point, new Vector3(point.position.x - 1, point.position.y, point.position.z)));
+                        neighbors.Add(new AStarPoint(this, point, new Vector3(point.position.x, point.position.y-1, point.position.z)));
+
+                        foreach (var item in neighbors)
                         {
-                            if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
-                            {
-                                currentNode = openSet[i];
-                            }
+                            if(openSet.)
                         }
-
-                        openSet.Remove(currentNode);
-                        closedSet.Add(currentNode);
-
-                        if (currentNode == endPoint)
-                        {
-                            pPath = ReconstructPath(startPoint, endPoint);
-                            trackLegnth = 0;
-                            for (int i = 0; i < pPath.Count - 1; i++)
-                            {
-                                AStarPoint point = pPath[i];
-                                AStarPoint nextPoint = pPath[i + 1];
-                                trackLegnth += Vector3.Distance(point.position, nextPoint.position);
-                            }
-                            currentPointIndex = 0;
-                            segmentPrecentMoved = 0;
-                        }
-
-                        currentNode.AddNeighbours();
                     }
                 }
-                return pPath;
+                return _path;
             }
         }
-        private List<AStarPoint> pPath;
-        public void ClearPath() { pPath = null; }
-
-        public static List<AStarPoint> ReconstructPath(AStarPoint cameFrom, AStarPoint current)
-        {
-            List<AStarPoint> path = new List<AStarPoint>();
-
-            AStarPoint currentNode = current;
-            while (currentNode != cameFrom)
-            {
-                path.Add(currentNode);
-                currentNode = currentNode.parent;
-            }
-
-            path.Reverse();
-            return path;
-        }
+        List<AStarPoint> _path;
 
         public float segmentPrecentMoved;
         public float trackLegnth;
@@ -197,7 +115,7 @@ public class Pathfinder
         /// </summary>
         public Vector3 NextPosition(float movement)
         {
-            segmentPrecentMoved += movement / trackLegnth / Vector3.Distance(path[currentPointIndex].position, path[currentPointIndex + 1].position);
+            segmentPrecentMoved += movement / trackLegnth / Vector3.Distance(Path[currentPointIndex].position, Path[currentPointIndex + 1].position);
 
             while (segmentPrecentMoved >= 1)
             {
@@ -205,7 +123,7 @@ public class Pathfinder
                 currentPointIndex++;
             }
 
-            return Vector3.Lerp(path[currentPointIndex].position, path[currentPointIndex + 1].position, segmentPrecentMoved);
+            return Vector3.Lerp(Path[currentPointIndex].position, Path[currentPointIndex + 1].position, segmentPrecentMoved);
         }
     }
 }

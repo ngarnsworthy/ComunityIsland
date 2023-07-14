@@ -154,7 +154,7 @@ public class Chunk
             returnPoints[17 * 16 + y] = new Vector3(worldLocation.x * 16 + 17, east.points[0, y], worldLocation.y * 16 + y);
         }
 
-        if (east == null || east.north == null) 
+        if (east == null || east.north == null)
         {
             world.CreateChunk(new Vector2Int(worldLocation.x + 1, worldLocation.y + 1));
         }

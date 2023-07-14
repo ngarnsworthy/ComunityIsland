@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 public class TaskInfo : MonoBehaviour
 {
@@ -19,7 +17,7 @@ public class TaskInfo : MonoBehaviour
         {
             buildingsToVisit.text += building.buildingType + " " + building.location.ToString() + ", ";
         }
-        buildingsToVisit.text = buildingsToVisit.text.Substring(0, buildingsToVisit.text.Length-2);
+        buildingsToVisit.text = buildingsToVisit.text.Substring(0, buildingsToVisit.text.Length - 2);
         resizer.Recalculate();
     }
 }

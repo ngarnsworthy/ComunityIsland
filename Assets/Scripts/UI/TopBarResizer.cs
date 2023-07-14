@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class TopBarResizer : MonoBehaviour
 {
@@ -16,7 +13,7 @@ public class TopBarResizer : MonoBehaviour
     }
     void Update()
     {
-        if (Time.frameCount % updateInterval == 0&&autoUpdate)
+        if (autoUpdate && Time.frameCount % updateInterval == 0)
         {
             Recalculate();
         }

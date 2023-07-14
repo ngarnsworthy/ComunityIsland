@@ -47,7 +47,7 @@ public class MoveTask : CitizenTask
         {
             if (building.items.Contains(itemStack))
             {
-                building.items.Find((value) => { return value == itemStack; }).stackSize+=count;
+                building.items.Find((value) => { return value == itemStack; }).stackSize += count;
             }
             else
             {

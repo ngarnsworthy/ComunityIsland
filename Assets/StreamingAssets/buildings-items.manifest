@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 53415967
+CRC: 1030512972
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6419b64ac7c37184d9029f983eafe8f8
+    Hash: 03d207dc9e4540409c2ea1d3c86f908f
   TypeTreeHash:
     serializedVersion: 2
     Hash: cdc4b16e505bc2bb98ad74b196246533
@@ -23,7 +23,7 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
+- Assets/Items/DEBUGItem.asset
 - Assets/Buildings/House.asset
 - Assets/Buildings/DEBUG.asset
-Dependencies:
-- /Users/nickgarnsworthy/Community World/Assets/StreamingAssets/items
+Dependencies: []

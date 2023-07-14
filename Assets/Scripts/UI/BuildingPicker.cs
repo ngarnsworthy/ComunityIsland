@@ -13,7 +13,7 @@ public class BuildingPicker : MonoBehaviour
     public GameObject buildingPickerSlot;
     public GameObject firstBuildingPickerSlot;
     List<GameObject> buildingPickerSlots = new List<GameObject>();
-    List<Building> buildings = new List<Building>();
+    Building[] buildings;
 
     int buildingPickerSlotIndex = 0;
 
@@ -21,8 +21,8 @@ public class BuildingPicker : MonoBehaviour
     {
         changeSelection.action.Enable();
         buildingPickerSlots.Add(firstBuildingPickerSlot);
-        string[] buildingAssets = TerrainGen.world.buildings.GetAllAssetNames();
-        for (int i = 0; i < buildingAssets.Length; i++)
+        buildings = TerrainGen.world.AssetBundle.LoadAllAssets<Building>();
+        for (int i = 0; i < buildings.Length; i++)
         {
             if (i != 0)
             {
@@ -38,8 +38,7 @@ public class BuildingPicker : MonoBehaviour
 
             Transform child = buildingPickerSlots[i].transform.GetChild(0);
 
-            buildings.Add(TerrainGen.world.buildings.LoadAsset<Building>(buildingAssets[i]));
-            child.GetComponent<Image>().sprite = TerrainGen.world.buildings.LoadAsset<Building>(buildingAssets[i]).sprite;
+            child.GetComponent<Image>().sprite = buildings[i].sprite;
         }
     }
 

@@ -7,10 +7,27 @@ public class PlacedBuilding
 {
     [NonSerialized] public GameObject gameObject;
     List<CitizenAI> citizenAIList;
-    [NonSerialized]public List<Citizen> workers;
+    [NonSerialized] public List<Citizen> workers;
     public List<ItemStack> items = new List<ItemStack>();
     public List<ItemStack> usedItems;
     public Queue<CitizenTask> tasks;
+    public List<CitizenTask> workingTasks
+    {
+        get
+        {
+            List<CitizenTask> tasks = new List<CitizenTask>(this.tasks.ToArray());
+
+            foreach (Citizen worker in workers)
+            {
+                if (worker.AI.currentTask != null)
+                {
+                    tasks.Add(worker.AI.currentTask);
+                }
+            }
+
+            return tasks;
+        }
+    }
     [NonSerialized] private Building buildingPrivate;
     [NonSerialized] PlacedBuildingComponent placedBuildingComponent;
     public Building building
@@ -19,7 +36,7 @@ public class PlacedBuilding
         {
             if (buildingPrivate == null)
             {
-                buildingPrivate = world.buildings.LoadAsset<Building>(buildingType);
+                buildingPrivate = world.AssetBundle.LoadAsset<Building>(buildingType);
             }
             return buildingPrivate;
         }
@@ -79,17 +96,17 @@ public class PlacedBuilding
 
     public void Update()
     {
-        foreach(CitizenAI citizen in citizenAIList)
+        foreach (CitizenAI citizen in citizenAIList)
         {
-            if(citizen.currentTask == null && building.levels[level].createsItems)
+            if (citizen.currentTask == null && building.levels[level].createsItems)
             {
                 citizen.currentTask = new CreateTask(this, new ItemStack(building.levels[level].createdItem, (int)building.levels[level].itemsPerSecond));
             }
-            if(citizen.currentTask is CreateTask task)
+            if (citizen.currentTask is CreateTask task)
             {
                 if (items.Contains(task.createdItem))
                 {
-                    items.Find((value) => { return value == task.createdItem; }).stackSize += task.createdItem.stackSize;
+                    items.Find((value) => value.Equals(task.createdItem)).stackSize += task.createdItem.stackSize;
                 }
                 else
                 {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WorkerInfoPage : MonoBehaviour
@@ -22,7 +20,7 @@ public class WorkerInfoPage : MonoBehaviour
             Destroy(child.gameObject);
         }
         float y = 0;
-        foreach(Citizen citizen in editBuilding.selectedBuilding.workers)
+        foreach (Citizen citizen in editBuilding.selectedBuilding.workers)
         {
             WorkerInfo info = Instantiate(workerInfoPrefab, transform).GetComponent<WorkerInfo>();
             Vector3 position = info.transform.position;

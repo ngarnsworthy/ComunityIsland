@@ -20,4 +20,4 @@ MonoBehaviour:
     createdItem: {fileID: 11400000, guid: 9c0f23e4ce2ef1d4a92d9c0ae3f69f7e, type: 2}
     itemsPerSecond: 5
   footprint: {x: 4, y: 4}
-  sprite: {fileID: 21300000, guid: 9aebd705574f9e642aef1e5f59b3e4d8, type: 3}
+  sprite: {fileID: 21300000, guid: fe4d8cce23c2c5840ad9752fffbf0a82, type: 3}

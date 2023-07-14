@@ -47,11 +47,12 @@ public static class ItemLocator
                 {
                     buildings.Add(building);
                     int addedCount = count - foundItems;
-                    if(addedCount > foundItemStack.stackSize)
+                    if (addedCount > foundItemStack.stackSize)
                     {
                         addedCount = foundItemStack.stackSize;
                     }
-                    if(building.usedItems.Contains(foundItemStack)){
+                    if (building.usedItems.Contains(foundItemStack))
+                    {
                         building.usedItems.Find((value) => { return value.Equals(foundItemStack); }).stackSize += addedCount;
                     }
                     else

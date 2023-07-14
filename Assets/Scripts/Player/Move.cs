@@ -44,7 +44,8 @@ public class Move : MonoBehaviour
 
     void Update()
     {
-        if (!running) {
+        if (!running)
+        {
             return;
         }
         Vector2 movement = xy.action.ReadValue<Vector2>();

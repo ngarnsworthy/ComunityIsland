@@ -7,26 +7,15 @@ using UnityEngine;
 [System.Serializable]
 public class World
 {
-    public AssetBundle buildings
+    public AssetBundle AssetBundle
     {
         get
         {
-            if (!buildingsPrivate)
+            if (!assetBundlesPrivate)
             {
-                buildingsPrivate = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "buildings"));
+                assetBundlesPrivate = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "buildings-items"));
             }
-            return buildingsPrivate;
-        }
-    }
-    public AssetBundle items
-    {
-        get
-        {
-            if (!itemsPrivate)
-            {
-                itemsPrivate = AssetBundle.LoadFromFile(Path.Combine(Application.streamingAssetsPath, "items"));
-            }
-            return itemsPrivate;
+            return assetBundlesPrivate;
         }
     }
 
@@ -65,8 +54,7 @@ public class World
         chunks[new SerializableVector2Int(Mathf.FloorToInt(location.x / 16), Mathf.FloorToInt(location.y / 16))].walkable[(location.x % 16 + 16) % 16, (location.y % 16 + 16) % 16] = value;
     }
 
-    [NonSerialized] private AssetBundle buildingsPrivate;
-    [NonSerialized] private AssetBundle itemsPrivate;
+    [NonSerialized] private AssetBundle assetBundlesPrivate;
     [NonSerialized] public TerrainGen terrainGen; //Callback
     public int seed;
     public string name = "World";
@@ -155,8 +143,40 @@ public class World
     public class ChunkLocation
     {
         public Chunk chunk;
-        public int x;
-        public int y;
+        public int x
+        {
+            get
+            {
+                return _x;
+            }
+            private set
+            {
+                _x = value;
+                while (_x < 0)
+                {
+                    chunk = chunk.west;
+                    _x += 16;
+                }
+            }
+        }
+        int _x;
+        public int y
+        {
+            get
+            {
+                return _y;
+            }
+            private set
+            {
+                _y = value;
+                while (_y < 0)
+                {
+                    chunk = chunk.south;
+                    _y += 16;
+                }
+            }
+        }
+        int _y;
 
         public ChunkLocation(Chunk chunk, int x, int y)
         {

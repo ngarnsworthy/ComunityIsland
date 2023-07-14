@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,7 +31,7 @@ public class EditBuilding : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 PlacedBuildingComponent component = hit.collider.gameObject.GetComponent<PlacedBuildingComponent>();
-                if (component!=null)
+                if (component != null)
                 {
                     PlacedBuilding building = component.placedBuilding;
                     if (building != null)

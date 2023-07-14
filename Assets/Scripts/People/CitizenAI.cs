@@ -4,18 +4,17 @@ using System.Collections.Generic;
 [Serializable]
 public class CitizenAI
 {
-    [NonSerialized]public Citizen citizen;
-    public Queue<CitizenTask> tasks = new Queue<CitizenTask>();
+    [NonSerialized] public Citizen citizen;
     public CitizenTask currentTask;
     [NonSerialized] public PlacedBuilding employment;
     [NonSerialized] public PlacedBuilding nextBuilding;
 
-    public CitizenAI(Citizen citizen) 
+    public CitizenAI(Citizen citizen)
     {
         TerrainGen.world.citizens.Add(this);
         this.citizen = citizen;
         UpdateBuilding();
-        if(employment == null)
+        if (employment == null)
         {
             TerrainGen.world.unemployedCitizenAIs.Add(this);
         }
@@ -27,28 +26,10 @@ public class CitizenAI
         {
             return;
         }
-        if (tasks == null && employment.tasks.Count!=0)
-        {
-            tasks.Enqueue(employment.tasks.Dequeue());
-        }
-        if (currentTask == null && tasks.Count != 0)
-        {
-            currentTask = tasks.Dequeue();
-        }
-        if (currentTask!=null&&!currentTask.priority && tasks.Count != 0)
-        {
-            while (!tasks.ToArray()[tasks.Count-1].priority)
-            {
-                tasks.Enqueue(tasks.Dequeue());
-            }
-            currentTask.started = false;
-            tasks.Enqueue(currentTask);
-            currentTask = tasks.Dequeue();
-        }
-        if (currentTask!=null&&!currentTask.started)
+        if (currentTask != null && !currentTask.started)
         {
             nextBuilding = currentTask.StartTaskLocation(citizen);
-            if(citizen.pathfinder == null)
+            if (citizen.pathfinder == null)
             {
                 citizen.pathfinder = new Pathfinder.AStarPath();
             }

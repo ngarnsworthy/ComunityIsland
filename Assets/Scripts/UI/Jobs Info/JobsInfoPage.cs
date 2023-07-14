@@ -1,12 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class JobsInfoPage : MonoBehaviour
 {
     public EditBuilding editBuilding;
-    public GameObject jobsInfoPrefab;
-    public GameObject workerInfoPrefab;
+    public GameObject taskInfoPrefab;
+    public Transform workingTasks;
+    public Transform neededTasks;
 
     public float spaceing = 50;
     private void OnEnable()
@@ -24,26 +23,18 @@ public class JobsInfoPage : MonoBehaviour
             Destroy(child.gameObject);
         }
         float y = 0;
-        foreach (Citizen citizen in editBuilding.selectedBuilding.workers)
+        foreach (CitizenTask task in editBuilding.selectedBuilding.workingTasks)
         {
-            if (citizen.AI.currentTask != null)
-            {
-                WorkerInfo workerInfo = Instantiate(workerInfoPrefab, transform).GetComponent<WorkerInfo>();
-                Vector3 position = workerInfo.transform.position;
-                position.y -= y;
-                y += spaceing;
-                workerInfo.transform.position = position;
-                workerInfo.citizen = citizen.AI;
-                workerInfo.Reload();
-
-                JobsInfo info = Instantiate(jobsInfoPrefab, transform).GetComponent<JobsInfo>();
-                position = info.transform.position;
-                position.y -= y;
-                y += spaceing;
-                info.transform.position = position;
-                info.citizen = citizen.AI;
-                y += info.Reload();
-            }
+            TaskInfo info = Instantiate(taskInfoPrefab, workingTasks).GetComponent<TaskInfo>();
+            info.current = true;
+            info.task = task;
+            info.Reload();
+        }
+        foreach (CitizenTask task in editBuilding.selectedBuilding.tasks.ToArray())
+        {
+            TaskInfo info = Instantiate(taskInfoPrefab, neededTasks).GetComponent<TaskInfo>();
+            info.task = task;
+            info.Reload();
         }
     }
 }
