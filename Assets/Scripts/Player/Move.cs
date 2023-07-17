@@ -37,6 +37,7 @@ public class Move : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         rigidbody = GetComponent<Rigidbody>();
         xy.action.Enable();
         jump.action.Enable();
@@ -68,7 +69,7 @@ public class Move : MonoBehaviour
         }
 
         Vector3 pos = transform.position;
-        float height = TerrainGen.world[new Vector2Int((int)pos.y, (int)pos.x)];
+        float height = TerrainGen.world[new Vector2Int((int)pos.x, (int)pos.z)];
         if (transform.position.y < height - 10)
         {
             pos.y = height + 10;

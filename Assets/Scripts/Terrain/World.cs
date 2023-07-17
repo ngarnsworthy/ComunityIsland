@@ -97,8 +97,12 @@ public class World
         return chunks[new Vector2Int((int)(location.x / 16), (int)(location.z / 16))];
     }
 
-    public List<Chunk> CreateChunks(Vector3 playerLocation)
+    public List<Chunk> CreateChunks(Vector3 playerLocation, int loadingDistance = 0)
     {
+        if (loadingDistance == 0)
+        {
+            loadingDistance = this.loadingDistance;
+        }
         List<Chunk> loadedChunks = new List<Chunk>();
         Vector2Int playerChunk = new Vector2Int((int)(playerLocation.x / 16), (int)(playerLocation.z / 16));
         for (int x = playerChunk.x - loadingDistance; x < playerChunk.x + loadingDistance; x++)
@@ -157,6 +161,11 @@ public class World
                     chunk = chunk.west;
                     _x += 16;
                 }
+                while (_x > 16)
+                {
+                    chunk = chunk.east;
+                    x -= 16;
+                }
             }
         }
         int _x;
@@ -173,6 +182,11 @@ public class World
                 {
                     chunk = chunk.south;
                     _y += 16;
+                }
+                while (_y > 16)
+                {
+                    chunk = chunk.north;
+                    _y -= 16;
                 }
             }
         }
@@ -194,6 +208,11 @@ public class World
     public static ChunkLocation ChunkLocationFromPoint(Vector2Int point)
     {
         return new ChunkLocation(TerrainGen.world.chunks[new Vector2Int(((int)point.x / 16), ((int)point.y / 16))], (int)(point.x % 16), ((int)point.y % 16));
+    }
+
+    public static SerializableVector2Int SerializableVector2IntFromVector3(Vector3 point)
+    {
+        return new Vector2Int(((int)point.x), ((int)point.y));
     }
 
     public Vector3 Vector3FromChunkLocation(ChunkLocation point)

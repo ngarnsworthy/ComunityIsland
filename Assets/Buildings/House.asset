@@ -16,5 +16,9 @@ MonoBehaviour:
   - mesh: {fileID: -2432090755550338912, guid: cd95b839cfdf2c8499554f2b412b5c79, type: 3}
     rotation: {x: 180, y: 0, z: 0}
     maxWorkers: 0
+    createsItems: 0
+    createdItem: {fileID: 0}
+    itemsPerSecond: 0
   footprint: {x: 2, y: 2}
+  doorLocation: {x: 1, y: 0}
   sprite: {fileID: 21300000, guid: 8d1201cae2193794fb870b1083ab5030, type: 3}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public class CitizenAI
@@ -29,13 +30,25 @@ public class CitizenAI
         if (currentTask != null && !currentTask.started)
         {
             nextBuilding = currentTask.StartTaskLocation(citizen);
-            if (citizen.pathfinder == null)
+
+            List<SerializableVector2Int> path;
+            if(citizen.pathfinder.GenerateAstarPath(World.SerializableVector2IntFromVector3(citizen.transform.position), World.SerializableVector2IntFromVector3(nextBuilding.gameObject.transform.position) + nextBuilding.building.doorLocation, out path))
             {
-                citizen.pathfinder = new Pathfinder.AStarPath();
+                citizen.path.Clear();
+                citizen.trackLegnth = 0;
+                for (int i = 0; i < path.Count; i++)
+                {
+                    SerializableVector2Int point = path[i];
+                    citizen.path.Add(new Vector3(point.x, TerrainGen.world[point], point.y));
+                    if (i != 0)
+                    {
+                        citizen.trackLegnth += Vector3.Distance(citizen.path[i], citizen.path[i - 1]);
+                    }
+                }
+                citizen.currentPointIndex = 0;
+                citizen.segmentPrecentMoved = 0;
+                currentTask.started = true;
             }
-            citizen.pathfinder.ClearPath();
-            citizen.pathfinder.start = citizen.transform.position;
-            citizen.pathfinder.end = nextBuilding.gameObject.transform.position;
         }
     }
 
