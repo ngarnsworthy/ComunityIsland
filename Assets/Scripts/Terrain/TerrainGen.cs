@@ -1,6 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter))]
 public class TerrainGen : MonoBehaviour
 {
     public static TerrainGen terrainGen;
@@ -17,7 +16,6 @@ public class TerrainGen : MonoBehaviour
     public GameObject chunkGameObject;
     public int loadingDistance;
     public float scale;
-    public GameObject citizenPrefab;
 
     void Start()
     {
@@ -31,6 +29,7 @@ public class TerrainGen : MonoBehaviour
             world = new World(loadingDistance, scale, Random.seed);
             world.name = worldName;
         }
+        CitizenController.Instance.Load();
         world.terrainGen = this;
         meshGenerater = new MeshGenerater(world, chunkLocation, player, loadingDistance, this);
         meshFilter = GetComponent<MeshFilter>();

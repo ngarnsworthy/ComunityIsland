@@ -8,6 +8,6 @@ public class CitizenInfo : MonoBehaviour
     void Update()
     {
         //Unemployed Citizens
-        unemployedCitizenText.text = "Unemployed Citizens Count: " + TerrainGen.world.unemployedCitizenAIs.Count + "/" + TerrainGen.world.citizens.Count;
+        unemployedCitizenText.text = "Unemployed Citizens Count: " + CitizenController.Instance.unemployedRecords.Count + "/" + CitizenController.Instance.records.Count;
     }
 }

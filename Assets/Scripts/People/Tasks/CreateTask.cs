@@ -13,4 +13,6 @@ public class CreateTask : CitizenTask
     public override string Name => "Create resources out of nothing";
 
     public override bool priority => false;
+
+    public override bool last => true;
 }

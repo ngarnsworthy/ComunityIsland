@@ -7,7 +7,7 @@ public class MeshGenerater
     public Mesh mesh;
     World world;
     Queue<Chunk> neededChunks = new Queue<Chunk>();
-    List<Chunk> loadedChunks = new List<Chunk>();
+    public List<Chunk> loadedChunks = new List<Chunk>();
     Transform chunkLocation;
     Transform player;
     int loadingDistance;
@@ -28,10 +28,7 @@ public class MeshGenerater
         while (true)
         {
             List<Chunk> chunks = world.CreateChunks(player.position);
-            foreach (var item in world.citizens)
-            {
-                chunks.AddRange(world.CreateChunks(item.citizen.transform.position));
-            }
+            chunks.AddRange(TerrainGen.world.forceLoadedChunks);
             for (int i = 0; i < chunkLocation.childCount; i++)
             {
                 Transform item = chunkLocation.GetChild(i);

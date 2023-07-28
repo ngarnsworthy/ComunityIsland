@@ -13,6 +13,11 @@ public abstract class CitizenTask
         get;
         protected set;
     }
+
+    public abstract bool last
+    {
+        get;
+    }
     public virtual bool priority
     {
         get { return true; }
@@ -26,6 +31,5 @@ public abstract class CitizenTask
         this.building = building;
     }
 
-    public virtual PlacedBuilding StartTaskLocation(Citizen citizen) { return building; }
-    public virtual PlacedBuilding NextTaskLocation(Citizen citizen) { return building; }
+    public virtual PlacedBuilding NextTaskLocation(CitizenRecord citizen) { started = true; return building; }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
@@ -61,31 +60,17 @@ public class World
     public float scale;
     public int loadingDistance;
     public Dictionary<SerializableVector2Int, Chunk> chunks;
-
-    public List<CitizenAI> unemployedCitizenAIs;
-    public List<CitizenAI> citizens;
+    public List<Chunk> forceLoadedChunks;
 
     public World(int loadingDistance, float scale, int seed)
     {
-        citizens = new List<CitizenAI>();
-        unemployedCitizenAIs = new List<CitizenAI>();
         chunks = new Dictionary<SerializableVector2Int, Chunk>();
         NoiseS3D.seed = seed;
         chunks.Add(new Vector2Int(0, 0), new Chunk(new Vector2Int(0, 0), scale));
+        forceLoadedChunks = new List<Chunk>();
         this.loadingDistance = loadingDistance;
         this.scale = scale;
         this.seed = seed;
-    }
-
-    public void BuildingBuilt()
-    {
-        foreach (var item in unemployedCitizenAIs.ToList())
-        {
-            if (item.UpdateBuilding())
-            {
-                unemployedCitizenAIs.Remove(item);
-            }
-        }
     }
 
     public Chunk GetChunkAtPoint(Vector3 location)
@@ -136,12 +121,13 @@ public class World
 
     public void Save()
     {
-        SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath + "/" + name, this);
-        Debug.Log(Application.persistentDataPath + "/" + name);
         foreach (Chunk item in chunks.Values)
         {
             item.Save();
         }
+        CitizenController.Instance.Save();
+        SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath + "/" + name, this);
+        Debug.Log(Application.persistentDataPath + "/" + name);
     }
 
     public class ChunkLocation

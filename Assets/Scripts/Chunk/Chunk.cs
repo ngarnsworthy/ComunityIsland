@@ -104,7 +104,7 @@ public class Chunk
 
     public Chunk(Vector2Int location, float scale)
     {
-        placedBuildings = new List<PlacedBuilding>();
+        placedBuildings = new CallbackList<PlacedBuilding>();
         worldLocation = location;
 
         walkable = new bool[16, 16];
@@ -246,6 +246,8 @@ public class Chunk
         height /= (building.footprint.y * building.footprint.x);
 
         PlacedBuilding newBuilding = new PlacedBuilding(building, location, height);
+        CitizenController.Instance.UpdateBuildings(newBuilding);
+
         placedBuildings.Add(newBuilding);
         for (int x = (int)(location.x - (building.footprint.x / 2)); x < (int)location.x + (building.footprint.x / 2); x++)
         {
@@ -260,7 +262,6 @@ public class Chunk
         {
             PlaceBuilding(newBuilding);
         }
-        world.BuildingBuilt();
     }
 
     public void PlaceBuilding(PlacedBuilding building)
@@ -281,9 +282,6 @@ public class Chunk
 
     public void Save()
     {
-        foreach (var item in placedBuildings)
-        {
-            item.UpdateCitizenAIList();
-        }
+
     }
 }

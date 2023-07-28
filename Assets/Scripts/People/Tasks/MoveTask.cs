@@ -8,6 +8,8 @@ public class MoveTask : CitizenTask
         get { return "Moving items to a building"; }
     }
 
+    public override bool last => buildingsToVisit.Count == 0;
+
     public PlacedBuilding lastBuilding;
     Item itemToGet;
     int count;
@@ -19,29 +21,17 @@ public class MoveTask : CitizenTask
         remaining = count;
     }
 
-    public override PlacedBuilding StartTaskLocation(Citizen citizen)
+    public override PlacedBuilding NextTaskLocation(CitizenRecord citizen)
     {
-        started = true;
-        List<PlacedBuilding> excludedBuildings = new List<PlacedBuilding>();
-        excludedBuildings.Add(building);
-        buildingsToVisit = ItemLocator.LocateItem(citizen.transform.position, itemToGet, count, excludedBuildings);
-        float minDistance = float.PositiveInfinity;
-        PlacedBuilding closestBuilding = null;
-        foreach (PlacedBuilding building in buildingsToVisit)
+        if (!started)
         {
-            float distance = Vector3.Distance(building.gameObject.transform.position, citizen.transform.position);
-            if (distance < minDistance)
+            List<PlacedBuilding> excludedBuildings = new List<PlacedBuilding>
             {
-                closestBuilding = building;
-                minDistance = distance;
-            }
+                building
+            };
+            buildingsToVisit = ItemLocator.LocateItem(citizen.gameObject.transform.position, itemToGet, count, excludedBuildings);
+            started = true;
         }
-        buildingsToVisit.Remove(closestBuilding);
-        return closestBuilding;
-    }
-
-    public override PlacedBuilding NextTaskLocation(Citizen citizen)
-    {
         ItemStack itemStack = new ItemStack(itemToGet, count);
         if (lastBuilding == building)
         {
@@ -71,7 +61,7 @@ public class MoveTask : CitizenTask
         PlacedBuilding closestBuilding = null;
         foreach (PlacedBuilding building in buildingsToVisit)
         {
-            float distance = Vector3.Distance(building.gameObject.transform.position, citizen.transform.position);
+            float distance = Vector3.Distance(building.gameObject.transform.position, citizen.gameObject.transform.position);
             if (distance < minDistance)
             {
                 closestBuilding = building;

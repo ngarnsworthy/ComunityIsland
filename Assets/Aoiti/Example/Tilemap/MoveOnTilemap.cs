@@ -1,13 +1,13 @@
+using Aoiti.Pathfinding;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using Aoiti.Pathfinding;
 
 
 public class MoveOnTilemap : MonoBehaviour
 {
-    Vector3Int[] directions=new Vector3Int[4] {Vector3Int.left,Vector3Int.right,Vector3Int.up,Vector3Int.down };
+    Vector3Int[] directions = new Vector3Int[4] { Vector3Int.left, Vector3Int.right, Vector3Int.up, Vector3Int.down };
 
     public Tilemap tilemap;
     public TileAndMovementCost[] tiles;
@@ -22,30 +22,30 @@ public class MoveOnTilemap : MonoBehaviour
     }
 
     public List<Vector3Int> path;
-    [Range(0.001f,1f)]
+    [Range(0.001f, 1f)]
     public float stepTime;
 
 
     public float DistanceFunc(Vector3Int a, Vector3Int b)
     {
-        return (a-b).sqrMagnitude;
+        return (a - b).sqrMagnitude;
     }
 
 
-    public Dictionary<Vector3Int,float> connectionsAndCosts(Vector3Int a)
+    public Dictionary<Vector3Int, float> connectionsAndCosts(Vector3Int a)
     {
-        Dictionary<Vector3Int, float> result= new Dictionary<Vector3Int, float>();
+        Dictionary<Vector3Int, float> result = new Dictionary<Vector3Int, float>();
         foreach (Vector3Int dir in directions)
         {
             foreach (TileAndMovementCost tmc in tiles)
             {
-                if (tilemap.GetTile(a+dir)==tmc.tile)
+                if (tilemap.GetTile(a + dir) == tmc.tile)
                 {
                     if (tmc.movable) result.Add(a + dir, tmc.movementCost);
 
                 }
             }
-                
+
         }
         return result;
     }
@@ -59,9 +59,9 @@ public class MoveOnTilemap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(1) )
+        if (Input.GetMouseButtonDown(1))
         {
-            var currentCellPos=tilemap.WorldToCell(transform.position);
+            var currentCellPos = tilemap.WorldToCell(transform.position);
             var target = tilemap.WorldToCell(Camera.main.ScreenToWorldPoint(Input.mousePosition));
             target.z = 0;
             pathfinder.GenerateAstarPath(currentCellPos, target, out path);
@@ -69,7 +69,7 @@ public class MoveOnTilemap : MonoBehaviour
             StartCoroutine(Move());
         }
 
-        
+
     }
 
     IEnumerator Move()
@@ -79,14 +79,14 @@ public class MoveOnTilemap : MonoBehaviour
             transform.position = tilemap.CellToWorld(path[0]);
             path.RemoveAt(0);
             yield return new WaitForSeconds(stepTime);
-            
+
         }
-        
+
 
     }
 
 
 
-    
+
 }
 

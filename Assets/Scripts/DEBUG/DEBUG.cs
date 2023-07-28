@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,7 +16,6 @@ public class DEBUG : MonoBehaviour
     void Update()
     {
         if (spawnInput.action.triggered)
-            Instantiate(citizen);
+            CitizenController.Instance.LoadRecords(new List<CitizenRecord> { new CitizenRecord() });
     }
-
 }

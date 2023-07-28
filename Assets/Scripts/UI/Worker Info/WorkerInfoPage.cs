@@ -20,14 +20,14 @@ public class WorkerInfoPage : MonoBehaviour
             Destroy(child.gameObject);
         }
         float y = 0;
-        foreach (Citizen citizen in editBuilding.selectedBuilding.workers)
+        foreach (CitizenRecord citizen in editBuilding.selectedBuilding.workers)
         {
             WorkerInfo info = Instantiate(workerInfoPrefab, transform).GetComponent<WorkerInfo>();
             Vector3 position = info.transform.position;
             position.y -= y;
             y += spaceing;
             info.transform.position = position;
-            info.citizen = citizen.AI;
+            info.citizen = citizen;
             info.Reload();
         }
     }

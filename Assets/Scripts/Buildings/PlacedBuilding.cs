@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlacedBuilding
 {
     [NonSerialized] public GameObject gameObject;
-    List<CitizenAI> citizenAIList;
-    [NonSerialized] public List<Citizen> workers;
+    [HideInInspector]
+    [NonSerialized]public List<CitizenRecord> workers;
     public List<ItemStack> items = new List<ItemStack>();
     public List<ItemStack> usedItems;
     public Queue<CitizenTask> tasks;
@@ -17,11 +17,11 @@ public class PlacedBuilding
         {
             List<CitizenTask> tasks = new List<CitizenTask>(this.tasks.ToArray());
 
-            foreach (Citizen worker in workers)
+            foreach (CitizenRecord record in workers)
             {
-                if (worker.AI.currentTask != null)
+                if (record.task != null)
                 {
-                    tasks.Add(worker.AI.currentTask);
+                    tasks.Add(record.task);
                 }
             }
 
@@ -36,7 +36,7 @@ public class PlacedBuilding
         {
             if (buildingPrivate == null)
             {
-                buildingPrivate = world.AssetBundle.LoadAsset<Building>(buildingType);
+                buildingPrivate = TerrainGen.world.AssetBundle.LoadAsset<Building>(buildingType);
             }
             return buildingPrivate;
         }
@@ -49,70 +49,63 @@ public class PlacedBuilding
 
     public string buildingType;
     public SerializableVector2Int location;
-    public int level;
-    public float height;
-    World world
+    public int level
     {
-        get
-        {
-            if (pWorld == null)
-            {
-                pWorld = TerrainGen.world;
-            }
-            return pWorld;
-        }
+        get { return _level; }
+        set { _level = value; CitizenController.Instance.UpdateBuildings(this); }
     }
-    [NonSerialized] private World pWorld;
+    int _level;
+    public float height;
 
     public PlacedBuilding(Building building, SerializableVector2Int location, float height)
     {
         this.building = building;
         this.location = location;
         this.height = height;
-        workers = new List<Citizen>();
+        workers = new List<CitizenRecord>();
         tasks = new Queue<CitizenTask>();
-        citizenAIList = new List<CitizenAI>();
     }
 
     public void Load()
     {
         placedBuildingComponent = gameObject.GetComponent<PlacedBuildingComponent>();
         placedBuildingComponent.placedBuilding = this;
-        foreach (var item in citizenAIList)
-        {
-            GameObject.Instantiate(TerrainGen.terrainGen.citizenPrefab).GetComponent<Citizen>().AI = item;
-            item.employment = this;
-        }
+        //foreach (var item in citizenRecords)
+        //{
+        //    GameObject.Instantiate(TerrainGen.terrainGen.citizenPrefab).GetComponent<Citizen>().AI = item;
+        //    item.employment = this;
+        //}
+        CitizenController.Instance.LoadRecords(workers);
     }
 
-    public void UpdateCitizenAIList()
-    {
-        citizenAIList.Clear();
-        foreach (var item in workers)
-        {
-            citizenAIList.Add(item.AI);
-        }
-    }
+    //public void UpdateCitizenAIList()
+    //{
+    //    citizenAIList.Clear();
+    //    foreach (var item in workers)
+    //    {
+    //        citizenAIList.Add(item.AI);
+    //    }
+    //}
 
     public void Update()
     {
-        foreach (CitizenAI citizen in citizenAIList)
-        {
-            if (citizen.currentTask == null && building.levels[level].createsItems)
-            {
-                citizen.currentTask = new CreateTask(this, new ItemStack(building.levels[level].createdItem, (int)building.levels[level].itemsPerSecond));
-            }
-            if (citizen.currentTask is CreateTask task)
-            {
-                if (items.Contains(task.createdItem))
-                {
-                    items.Find((value) => value.Equals(task.createdItem)).stackSize += task.createdItem.stackSize;
-                }
-                else
-                {
-                    items.Add(task.createdItem);
-                }
-            }
-        }
+        //foreach (CitizenAI citizen in citizenAIList)
+        //{
+        //    if (citizen.currentTask == null && building.levels[level].createsItems)
+        //    {
+        //        citizen.currentTask = new CreateTask(this, new ItemStack(building.levels[level].createdItem, (int)building.levels[level].itemsPerSecond));
+        //    }
+        //    if (citizen.currentTask is CreateTask task)
+        //    {
+        //        if (items.Contains(task.createdItem))
+        //        {
+        //            items.Find((value) => value.Equals(task.createdItem)).stackSize += task.createdItem.stackSize;
+        //        }
+        //        else
+        //        {
+        //            items.Add(task.createdItem);
+        //        }
+        //    }
+        //}
     }
 }
