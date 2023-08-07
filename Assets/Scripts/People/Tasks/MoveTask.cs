@@ -10,6 +10,8 @@ public class MoveTask : CitizenTask
 
     public override bool last => buildingsToVisit.Count == 0;
 
+    public override bool done => true;
+
     public PlacedBuilding lastBuilding;
     Item itemToGet;
     int count;

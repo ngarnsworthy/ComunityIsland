@@ -18,6 +18,10 @@ public abstract class CitizenTask
     {
         get;
     }
+    public abstract bool done
+    {
+        get;
+    }
     public virtual bool priority
     {
         get { return true; }

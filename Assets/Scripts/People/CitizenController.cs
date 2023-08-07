@@ -6,15 +6,16 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
-using static UnityEditor.Progress;
 
 public class CitizenController : MonoBehaviour
 {
+    public float heightOffset;
     public GameObject citizenGameObject;
     public static CitizenController Instance { get; private set; }
 
     Pathfinder<SerializableVector2Int> pathfinder = new Pathfinder<SerializableVector2Int>((p1, p2) => { return Vector2Int.Distance(p1, p2); }, (SerializableVector2Int pos) =>
     {
+        Vector3 startLocation = new Vector3(pos.x, TerrainGen.world[new SerializableVector2Int(pos.x, pos.y)], pos.y);
         Dictionary<SerializableVector2Int, float> neighbours = new Dictionary<SerializableVector2Int, float>();
         for (int x = -1; x < 2; x++)
         {
@@ -22,11 +23,9 @@ public class CitizenController : MonoBehaviour
             {
 
                 if (x == 0 && y == 0) continue;
-                SerializableVector2Int dir = new SerializableVector2Int(x, y);
-                World.ChunkLocation chunkLocation = new World.ChunkLocation(TerrainGen.world.chunks[new SerializableVector2Int(0, 0)], x + pos.x, y + pos.y);
-                if (TerrainGen.world.GetWalkable(new SerializableVector2Int(pos.x + x, pos.y + y))) ;
+                if (TerrainGen.world.GetWalkable(new SerializableVector2Int(pos.x + x, pos.y + y))||true)
                 {
-                    neighbours.Add(new SerializableVector2Int(x + pos.x, y + pos.y), Vector3.Distance(TerrainGen.world.Vector3FromChunkLocation(chunkLocation), new Vector3(pos.x, TerrainGen.world[new SerializableVector2Int(pos.x, pos.y)], pos.y)));
+                    neighbours.Add(new SerializableVector2Int(x + pos.x, y + pos.y), Vector3.Distance(startLocation, new Vector3(pos.x, TerrainGen.world[new SerializableVector2Int(pos.x, pos.y)], pos.y)));
                 }
 
             }
@@ -133,24 +132,44 @@ public class CitizenController : MonoBehaviour
 
             if (record.employment == null)
                 continue;
-            if (record.path != null && record.path.Count > 1 && record.currentPointIndex < record.path.Count - 2)
+            if (record.path != null && record.path.Count > 1)
             {
-                record.segmentPrecentMoved += record.movementSpeed / record.trackLegnth / Vector3.Distance(record.path[record.currentPointIndex], record.path[record.currentPointIndex + 1]);
-
-                while (record.segmentPrecentMoved >= 1)
+                if(record.currentPointIndex < record.path.Count - 1)
                 {
-                    record.segmentPrecentMoved--;
-                    record.currentPointIndex++;
-                }
+                    //On path
+                    record.segmentPrecentMoved += (record.movementSpeed * Time.deltaTime) / record.trackLegnth / Vector3.Distance(record.path[record.currentPointIndex], record.path[record.currentPointIndex + 1]);
 
-                if (record.currentPointIndex >= record.path.Count && !record.task.last)
-                {
-                    GeneratePath(record);
+                    while (record.segmentPrecentMoved >= 1)
+                    {
+                        record.segmentPrecentMoved -= 1;
+                        record.currentPointIndex++;
+                    }
+
+                    if (record.currentPointIndex < record.path.Count - 1)
+                        record.gameObject.transform.position = Vector3.Lerp(record.path[record.currentPointIndex], record.path[record.currentPointIndex + 1], record.segmentPrecentMoved);
                 }
                 else
                 {
-                    record.gameObject.transform.position = Vector3.Lerp(record.path[record.currentPointIndex], record.path[record.currentPointIndex + 1], record.segmentPrecentMoved);
-                    Debug.Log(Vector3.Lerp(record.path[record.currentPointIndex], record.path[record.currentPointIndex + 1], record.segmentPrecentMoved));
+                    //Off path
+                    if (record.task.last)
+                    {
+                        //Last Building in path
+                        if(record.task.done)
+                        {
+                            //Task is done and ready to be replaced
+                            record.task = null;
+                        }
+                        else
+                        {
+                            //Task is not done and needs to wait before going to next building
+                            record.gameObject.SetActive(false);
+                        }
+                    }
+                    else
+                    {
+                        //Not last building
+                        GeneratePath(record);
+                    }
                 }
             }
             if (record.task == null && record.employment.building.levels[record.employment.level].createsItems)
@@ -160,10 +179,19 @@ public class CitizenController : MonoBehaviour
             if (!record.task.started)
             {
                 GeneratePath(record);
+                record.gameObject.SetActive(true);
             }
-            if(record.task is CreateTask)
+            if (record.task is CreateTask && !record.gameObject.activeInHierarchy)
             {
-
+                CreateTask task = (CreateTask)record.task;
+                if (record.employment.items.Contains(task.createdItem))
+                {
+                    record.employment.items.Find((value) => { return value.Equals(task.createdItem); }).stackSize += task.createdItem.stackSize;
+                }
+                else
+                {
+                    record.employment.items.Add(task.createdItem);
+                }
             }
         }
     }
@@ -174,10 +202,11 @@ public class CitizenController : MonoBehaviour
         record.trackLegnth = 0;
         List<SerializableVector2Int> newPath;
         pathfinder.GenerateAstarPath(new SerializableVector2Int((int)record.gameObject.transform.position.x, (int)record.gameObject.transform.position.z), record.nextBuilding.location + record.nextBuilding.building.doorLocation, out newPath);
+
         record.path.Clear();
         for (int i = 0; i < newPath.Count; i++)
         {
-            record.path.Add(new Vector3(newPath[i].x, TerrainGen.world[newPath[i]], newPath[i].y));
+            record.path.Add(new Vector3(newPath[i].x, TerrainGen.world[newPath[i]]+heightOffset, newPath[i].y));
             if (i != 0)
             {
                 record.trackLegnth += Vector3.Distance(record.path[i - 1], record.path[i]);

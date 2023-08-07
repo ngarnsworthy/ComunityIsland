@@ -15,4 +15,6 @@ public class CreateTask : CitizenTask
     public override bool priority => false;
 
     public override bool last => true;
+
+    public override bool done => false;
 }

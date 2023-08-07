@@ -48,7 +48,7 @@ public class CitizenRecord
     public PlacedBuilding employment;
 
     public float segmentPrecentMoved;
-    public float movementSpeed => 5;
+    public float movementSpeed => 50;
     public int currentPointIndex;
     public float trackLegnth;
 

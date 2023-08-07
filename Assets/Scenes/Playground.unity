@@ -279,7 +279,6 @@ MonoBehaviour:
   editMenu: {fileID: 215959071}
   player: {fileID: 63311044}
   selectedBuilding:
-    citizenRecords: []
     items: []
     usedItems: []
     buildingType: 
@@ -2027,6 +2026,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd858eeff92fc6419d5230f09f4b136, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heightOffset: 1
   citizenGameObject: {fileID: 1781899113745326723, guid: 81c6493198103d449b3702ae3cba3a89,
     type: 3}
   records: []
