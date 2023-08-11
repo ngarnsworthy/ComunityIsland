@@ -186,11 +186,12 @@ public class CitizenController : MonoBehaviour
                 CreateTask task = (CreateTask)record.task;
                 if (record.employment.items.Contains(task.createdItem))
                 {
-                    record.employment.items.Find((value) => { return value.Equals(task.createdItem); }).stackSize += task.createdItem.stackSize;
+                    record.employment.items.Find((value) => { return value.Equals(task.createdItem); }).stackSize += task.createdItem.stackSize * Time.deltaTime;
+                    Debug.Log(task.createdItem.stackSize * Time.deltaTime);
                 }
                 else
                 {
-                    record.employment.items.Add(task.createdItem);
+                    record.employment.items.Add(new ItemStack(task.createdItem));
                 }
             }
         }

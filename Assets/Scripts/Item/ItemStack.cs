@@ -4,7 +4,13 @@
 public class ItemStack
 {
     public Item item;
-    public int stackSize;
+    public float stackSize;
+
+    public ItemStack(ItemStack itemStack)
+    {
+        item = itemStack.item;
+        stackSize = itemStack.stackSize;
+    }
 
     public ItemStack(Item item, int stackSize)
     {

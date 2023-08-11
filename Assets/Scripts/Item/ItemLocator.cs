@@ -49,7 +49,7 @@ public static class ItemLocator
                     int addedCount = count - foundItems;
                     if (addedCount > foundItemStack.stackSize)
                     {
-                        addedCount = foundItemStack.stackSize;
+                        addedCount = (int)foundItemStack.stackSize;
                     }
                     if (building.usedItems.Contains(foundItemStack))
                     {

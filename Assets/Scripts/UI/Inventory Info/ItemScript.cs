@@ -10,7 +10,7 @@ public class ItemScript : MonoBehaviour
 
     public void Reload()
     {
-        stackSize.text = "Size: " + item.stackSize;
+        stackSize.text = "Size: " + (int)item.stackSize;
         itemName.text = item.item.name;
 
         resizer.Recalculate();

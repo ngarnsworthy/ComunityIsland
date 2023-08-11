@@ -43,7 +43,7 @@ public class MoveTask : CitizenTask
             }
             else
             {
-                building.items.Add(itemStack);
+                building.items.Add(new ItemStack(itemStack));
             }
             Done = true;
         }

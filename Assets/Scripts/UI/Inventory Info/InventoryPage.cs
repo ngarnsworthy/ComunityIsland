@@ -11,6 +11,10 @@ public class InventoryPage : MonoBehaviour
         if (editBuilding.selectedBuilding.items == null)
             return;
         float y = 0;
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
         foreach (ItemStack item in editBuilding.selectedBuilding.items)
         {
             ItemScript itemScript = Instantiate(itemPrefab, transform).GetComponent<ItemScript>();
