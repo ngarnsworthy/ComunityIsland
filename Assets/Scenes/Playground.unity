@@ -471,6 +471,7 @@ MonoBehaviour:
   spacing: 10
   updateInterval: 500
   autoUpdate: 1
+  text: 0
 --- !u!114 &215959075
 MonoBehaviour:
   m_ObjectHideFlags: 0

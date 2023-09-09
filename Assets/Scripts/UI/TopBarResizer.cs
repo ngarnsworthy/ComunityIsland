@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class TopBarResizer : MonoBehaviour
@@ -7,9 +8,17 @@ public class TopBarResizer : MonoBehaviour
     public float spacing;
     public int updateInterval = 5;
     public bool autoUpdate = true;
+
+    [SerializeField]
+    bool text = false;
     private void Awake()
     {
         firstLocation = elements[0].anchoredPosition;
+        if(text)
+            foreach (var item in elements)
+            {
+                item.sizeDelta = new Vector2(1000, item.rect.height);
+            }
     }
     void Update()
     {
@@ -20,11 +29,23 @@ public class TopBarResizer : MonoBehaviour
     }
     public void Recalculate()
     {
-        float sum = firstLocation.x;
+        float sum = 0;
         for (int i = 0; i < elements.Length; i++)
         {
             elements[i].anchoredPosition = new Vector2(sum, firstLocation.y);
-            sum += spacing + elements[i].rect.width;
+            if (text)
+            {
+                TextMeshProUGUI text = elements[i].GetComponent<TextMeshProUGUI>();
+                if (text != null)
+                {
+                    sum += spacing+text.renderedWidth;
+                    Debug.Log(text.renderedWidth);
+                }
+            }
+            else
+            {
+                sum += spacing + elements[i].rect.width;
+            }
         }
     }
 }

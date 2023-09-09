@@ -10,7 +10,7 @@ public class CreateTask : CitizenTask
         this.createdItem = createdItem;
     }
 
-    public override string Name => "Create resources out of nothing";
+    public override string Name => "Createing "+createdItem.item.name;
 
     public override bool priority => false;
 

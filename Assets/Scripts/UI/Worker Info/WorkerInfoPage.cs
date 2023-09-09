@@ -31,4 +31,16 @@ public class WorkerInfoPage : MonoBehaviour
             info.Reload();
         }
     }
+
+    private void Update()
+    {
+        if (Time.frameCount % 10 == 0)
+        {
+            foreach (Transform child in transform)
+            {
+                WorkerInfo itemScript = child.GetComponent<WorkerInfo>();
+                itemScript.Reload();
+            }
+        }
+    }
 }

@@ -181,13 +181,24 @@ public class CitizenController : MonoBehaviour
                 GeneratePath(record);
                 record.gameObject.SetActive(true);
             }
+            if (record.task is CraftingTask && !record.gameObject.activeInHierarchy) 
+            {
+                CraftingTask task = (CraftingTask)record.task;
+                foreach (var item in task.inputs)
+                {
+                    if (!record.employment.items.Contains(item))
+                    {
+                        return;
+                    }
+                }
+
+            }
             if (record.task is CreateTask && !record.gameObject.activeInHierarchy)
             {
                 CreateTask task = (CreateTask)record.task;
                 if (record.employment.items.Contains(task.createdItem))
                 {
                     record.employment.items.Find((value) => { return value.Equals(task.createdItem); }).stackSize += task.createdItem.stackSize * Time.deltaTime;
-                    Debug.Log(task.createdItem.stackSize * Time.deltaTime);
                 }
                 else
                 {

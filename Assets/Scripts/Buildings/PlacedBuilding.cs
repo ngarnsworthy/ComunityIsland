@@ -9,7 +9,7 @@ public class PlacedBuilding
     [HideInInspector]
     [NonSerialized]public List<CitizenRecord> workers;
     public List<ItemStack> items = new List<ItemStack>();
-    public List<ItemStack> usedItems;
+    public List<ItemStack> reservedItems;
     public Queue<CitizenTask> tasks;
     public List<CitizenTask> workingTasks
     {
@@ -64,6 +64,15 @@ public class PlacedBuilding
         this.height = height;
         workers = new List<CitizenRecord>();
         tasks = new Queue<CitizenTask>();
+    }
+
+    public bool Reserve(ItemStack itemStack)
+    {
+        if (items.Find((i) => i.Equals(itemStack)).stackSize < itemStack.stackSize)
+        {
+            return false;
+        }
+
     }
 
     public void Load()

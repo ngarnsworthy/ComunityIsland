@@ -27,4 +27,16 @@ public class InventoryPage : MonoBehaviour
             itemScript.Reload();
         }
     }
+
+    private void Update()
+    {
+        if (Time.frameCount % 10 == 0)
+        {
+            foreach (Transform child in transform)
+            {
+                ItemScript itemScript = child.GetComponent<ItemScript>();
+                itemScript.Reload();
+            }
+        }
+    }
 }
