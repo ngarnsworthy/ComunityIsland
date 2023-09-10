@@ -6,16 +6,16 @@ public class ItemStack
     public Item item;
     public float stackSize;
 
-    public ItemStack(ItemStack itemStack)
-    {
-        item = itemStack.item;
-        stackSize = itemStack.stackSize;
-    }
-
     public ItemStack(Item item, int stackSize)
     {
         this.item = item;
         this.stackSize = stackSize;
+    }
+
+    public ItemStack(ItemStack itemStack)
+    {
+        this.item = itemStack.item;
+        this.stackSize = itemStack.stackSize;
     }
 
     public override bool Equals(object obj)

@@ -10,14 +10,13 @@ public class Building : ScriptableObject
         public Mesh mesh;
         public Vector3 rotation;
         public int maxWorkers;
-        public bool createsItems;
         public Item createdItem;
         public float itemsPerSecond;
-        [Range(0, 1)]
-        public float createVSCraftingWorkers;
+        public int createWorkers;
         public ItemStack[] craftingIngredients;
         public ItemStack output;
         public float craftingSpeed;
+        public int craftingWorkers;
     }
     public Level[] levels;
     public Vector2 footprint;

@@ -35,6 +35,7 @@ public class CitizenController : MonoBehaviour
     [HideInInspector] public List<CitizenRecord> records = new List<CitizenRecord>();
     [HideInInspector] public List<CitizenRecord> loadedRecords = new List<CitizenRecord>();
     [HideInInspector] public List<CitizenRecord> unemployedRecords = new List<CitizenRecord>();
+    Dictionary<PlacedBuilding, List<ItemStack>> neededItems = new Dictionary<PlacedBuilding, List<ItemStack>>();
     List<PlacedBuilding> notFiledBuildings = new List<PlacedBuilding>();
 
     int nextId = 0;
@@ -172,26 +173,60 @@ public class CitizenController : MonoBehaviour
                     }
                 }
             }
-            if (record.task == null && record.employment.building.levels[record.employment.level].createsItems)
+            if (record.task == null)
             {
-                record.task = new CreateTask(record.employment, new ItemStack(record.employment.building.levels[record.employment.level].createdItem, (int)record.employment.building.levels[record.employment.level].itemsPerSecond));
+                if(record.employment.building.levels[record.employment.level].createWorkers < record.employment.createingWorkers.Count)
+                {
+                    record.task = new CreateTask(record.employment, new ItemStack(record.employment.building.levels[record.employment.level].createdItem, (int)record.employment.building.levels[record.employment.level].itemsPerSecond));
+                    record.employment.createingWorkers.Add(record);
+                }
+                else if (record.employment.building.levels[record.employment.level].createWorkers < record.employment.craftingWorkers.Count)
+                {
+                    record.task = new CraftingTask(record.employment.building.levels[record.employment.level].output, record.employment.building.levels[record.employment.level].craftingIngredients, record.employment.building.levels[record.employment.level].craftingSpeed, record.employment);
+                    record.employment.craftingWorkers.Add(record);
+                }
+                else if(!neededItems.Values.All(i => i.Count == 0))
+                {
+                    foreach (KeyValuePair<PlacedBuilding, List<ItemStack>> item in neededItems)
+                    {
+                        if(item.Value.Count != 0)
+                        {
+                            record.task = new MoveTask(item.Key, item.Value[0]);
+                            item.Value.RemoveAt(0);
+                            break;
+                        }
+                    }
+                }
             }
             if (!record.task.started)
             {
                 GeneratePath(record);
                 record.gameObject.SetActive(true);
             }
-            if (record.task is CraftingTask && !record.gameObject.activeInHierarchy) 
+            if (record.task is CraftingTask craftingTask && !record.gameObject.activeInHierarchy && !craftingTask.crafting) 
             {
                 CraftingTask task = (CraftingTask)record.task;
+                bool hasAllItems = true;
                 foreach (var item in task.inputs)
                 {
                     if (!record.employment.items.Contains(item))
                     {
-                        return;
+                        if (!neededItems.ContainsKey(record.employment))
+                            neededItems.Add(record.employment, new List<ItemStack>());
+                        if (neededItems[record.employment].Contains(item))
+                        {
+                            neededItems[record.employment].Find(i => i.Equals(item)).stackSize += item.stackSize;
+                        }
+                        else
+                        {
+                            neededItems[record.employment].Add(new ItemStack(item));
+                        }
+                        hasAllItems = false;
                     }
                 }
-
+                if (!hasAllItems)
+                    return;
+                StartCoroutine(craftingTask.Craft(record.employment));
             }
             if (record.task is CreateTask && !record.gameObject.activeInHierarchy)
             {

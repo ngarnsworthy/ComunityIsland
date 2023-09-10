@@ -26,7 +26,6 @@ public abstract class CitizenTask
     {
         get { return true; }
     }
-    public List<PlacedBuilding> buildingsToVisit = new List<PlacedBuilding>();
     public PlacedBuilding building;
     public bool started = false;
 

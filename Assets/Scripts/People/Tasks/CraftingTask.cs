@@ -8,17 +8,35 @@ public class CraftingTask : CitizenTask
     public ItemStack output;
     public ItemStack[] inputs;
     public float craftingTime;
-
-    IEnumerator Craft()
+    public bool crafting;
+    public IEnumerator Craft(PlacedBuilding building)
     {
-        yield return new WaitForSeconds(craftingTime);
+        crafting = true;
         foreach (var item in inputs)
         {
-            building.items.Remove(item);
+            ItemStack foundItemStack = building.items.Find(i => i.Equals(item));
+            if (foundItemStack.stackSize == item.stackSize)
+            {
+                building.items.Remove(item);
+            }
+            else
+            {
+                foundItemStack.stackSize -= item.stackSize;
+            }
         }
+        yield return new WaitForSeconds(craftingTime);
+        if (building.items.Contains(output))
+        {
+            building.items.Find(i => i.Equals(output)).stackSize += output.stackSize;
+        }
+        else
+        {
+            building.items.Add(new ItemStack(output));
+        }
+        crafting = false;
     }
 
-    public CraftingTask(ItemStack output, ItemStack[] inputs, float craftingTimelay, PlacedBuilding building) : base(building)
+    public CraftingTask(ItemStack output, ItemStack[] inputs, float craftingTime, PlacedBuilding building) : base(building)
     {
         this.output = output;
         this.inputs = inputs;

@@ -9,8 +9,10 @@ public class PlacedBuilding
     [HideInInspector]
     [NonSerialized]public List<CitizenRecord> workers;
     public List<ItemStack> items = new List<ItemStack>();
-    public List<ItemStack> reservedItems;
+    public List<ItemStack> reservedItems = new List<ItemStack>();
     public Queue<CitizenTask> tasks;
+    public List<CitizenRecord> createingWorkers;
+    public List<CitizenRecord> craftingWorkers;
     public List<CitizenTask> workingTasks
     {
         get
@@ -68,11 +70,38 @@ public class PlacedBuilding
 
     public bool Reserve(ItemStack itemStack)
     {
-        if (items.Find((i) => i.Equals(itemStack)).stackSize < itemStack.stackSize)
+        ItemStack foundItemStack = items.Find((i) => i.Equals(itemStack));
+        if (foundItemStack.stackSize < itemStack.stackSize)
         {
             return false;
         }
+        else if(foundItemStack.stackSize == itemStack.stackSize)
+        {
+            items.Remove(itemStack);
+        }
+        else
+        {
+            foundItemStack.stackSize -= itemStack.stackSize;
+        }
 
+        if(reservedItems.Find(i => i.Equals(itemStack)) is ItemStack reservedItemStack)
+        {
+            reservedItemStack.stackSize += itemStack.stackSize;
+        }
+        else
+        {
+            reservedItems.Add(itemStack);
+        }
+        return true;
+    }
+
+    public int ReserveIfPosible(ItemStack itemStack)
+    {
+        ItemStack foundItemStack = items.Find((i) => i.Equals(itemStack));
+        int removableCount = (int)Mathf.Max(itemStack.stackSize, foundItemStack.stackSize);
+        if (!Reserve(new ItemStack(itemStack.item, removableCount)))
+            throw new Exception("Error when reserving");
+        return removableCount;
     }
 
     public void Load()

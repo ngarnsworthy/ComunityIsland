@@ -12,12 +12,17 @@ public class TaskInfo : MonoBehaviour
     public void Reload()
     {
         taskType.text = "Task type: " + task.Name;
-        buildingsToVisit.text = "Buildings: ";
-        foreach (PlacedBuilding building in task.buildingsToVisit)
+        buildingsToVisit.text = "";
+        if(task is MoveTask moveTask)
         {
-            buildingsToVisit.text += building.buildingType + " " + building.location.ToString() + ", ";
+            buildingsToVisit.text = "Buildings To Visit: ";
+            foreach (PlacedBuilding building in moveTask.buildingData.Keys)
+            {
+                buildingsToVisit.text += building.buildingType + " " + building.location.ToString() + ", ";
+            }
+            buildingsToVisit.text = buildingsToVisit.text.Substring(0, buildingsToVisit.text.Length - 2);
         }
-        buildingsToVisit.text = buildingsToVisit.text.Substring(0, buildingsToVisit.text.Length - 2);
+
         resizer.Recalculate();
     }
 }

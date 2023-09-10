@@ -3,15 +3,15 @@ using UnityEngine;
 
 public static class ItemLocator
 {
-    public static List<PlacedBuilding> LocateItem(Vector3 location, Item item, int count, List<PlacedBuilding> excludedBuildings = null)
+    public static Dictionary<PlacedBuilding, int> LocateItem(Vector3 location, ItemStack item, List<PlacedBuilding> excludedBuildings = null)
     {
-        List<PlacedBuilding> buildings = new List<PlacedBuilding>();
-        int foundItems = 0;
+        ItemStack remainingItemStack = new ItemStack(item);
+        Dictionary<PlacedBuilding, int> buildings = new Dictionary<PlacedBuilding, int>();
         Queue<Chunk> chunkQueue = new Queue<Chunk>();
         chunkQueue.Enqueue(TerrainGen.world.GetChunkAtPoint(location));
         List<Chunk> checkedChunks = new List<Chunk>();
         HashSet<Chunk> allChunks = new HashSet<Chunk>();
-        while (foundItems <= count)
+        while (remainingItemStack.stackSize != 0)
         {
             Chunk chunk = chunkQueue.Dequeue();
             if (allChunks.Count <= 1000)
@@ -42,25 +42,11 @@ public static class ItemLocator
             {
                 if (excludedBuildings != null && excludedBuildings.Contains(building))
                     continue;
-                ItemStack foundItemStack = building.items.Find((e) => { return e.item = item; });
-                if (foundItemStack != null)
+                if (building.items.Find(i => i.Equals(item)) is ItemStack foundItemStack)
                 {
-                    buildings.Add(building);
-                    int addedCount = count - foundItems;
-                    if (addedCount > foundItemStack.stackSize)
-                    {
-                        addedCount = (int)foundItemStack.stackSize;
-                    }
-                    if (building.usedItems.Contains(foundItemStack))
-                    {
-                        building.usedItems.Find((value) => { return value.Equals(foundItemStack); }).stackSize += addedCount;
-                    }
-                    else
-                    {
-                        building.usedItems.Add(new ItemStack(item, addedCount));
-                    }
-                    foundItems += addedCount;
-                    foundItemStack.stackSize -= addedCount;
+                    int foundItemCount = building.ReserveIfPosible(remainingItemStack);
+                    remainingItemStack.stackSize -= foundItemCount;
+                    buildings.Add(building, foundItemCount);
                 }
             }
         }
