@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using static UnityEngine.Rendering.DebugUI;
 
 [Serializable]
 public class CallbackList<T> : List<T>
@@ -23,7 +21,8 @@ public class CallbackList<T> : List<T>
         }
     }
 
-    public void Add(T newItem){
+    public void Add(T newItem)
+    {
         base.Add(newItem);
         callback(newItem);
     }

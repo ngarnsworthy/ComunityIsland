@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 [Serializable]
 public abstract class CitizenTask
@@ -18,21 +17,24 @@ public abstract class CitizenTask
     {
         get;
     }
-    public abstract bool done
-    {
-        get;
-    }
     public virtual bool priority
     {
         get { return true; }
     }
     public PlacedBuilding building;
-    public bool started = false;
+    protected CitizenRecord citizen;
+    public bool firstPathGenerated = false;
 
-    public CitizenTask(PlacedBuilding building)
+    public CitizenTask(PlacedBuilding building, CitizenRecord citizen)
+    {
+        this.building = building;
+        this.citizen = citizen;
+    }
+
+    protected CitizenTask(PlacedBuilding building)
     {
         this.building = building;
     }
 
-    public virtual PlacedBuilding NextTaskLocation(CitizenRecord citizen) { started = true; return building; }
+    public virtual PlacedBuilding NextTaskLocation() { return building; }
 }

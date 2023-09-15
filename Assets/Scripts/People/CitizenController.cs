@@ -1,11 +1,7 @@
 using Aoiti.Pathfinding;
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
 
 public class CitizenController : MonoBehaviour
 {
@@ -23,7 +19,7 @@ public class CitizenController : MonoBehaviour
             {
 
                 if (x == 0 && y == 0) continue;
-                if (TerrainGen.world.GetWalkable(new SerializableVector2Int(pos.x + x, pos.y + y))||true)
+                if (TerrainGen.world.GetWalkable(new SerializableVector2Int(pos.x + x, pos.y + y)) || true)
                 {
                     neighbours.Add(new SerializableVector2Int(x + pos.x, y + pos.y), Vector3.Distance(startLocation, new Vector3(pos.x, TerrainGen.world[new SerializableVector2Int(pos.x, pos.y)], pos.y)));
                 }
@@ -131,11 +127,63 @@ public class CitizenController : MonoBehaviour
             //Show citizen if in loaded chunks.
             record.gameObject.SetActive(TerrainGen.terrainGen.meshGenerater.loadedChunks.Contains(TerrainGen.world.GetChunkAtPoint(record.gameObject.transform.position)));
 
+
             if (record.employment == null)
                 continue;
-            if (record.path != null && record.path.Count > 1)
+
+            if (record.task == null)
             {
-                if(record.currentPointIndex < record.path.Count - 1)
+                if (record.path == null)
+                    record.path = new List<Vector3>();
+                record.path.Clear();
+                if (record.employment.building.levels[record.employment.level].createWorkers > record.employment.creatingWorkers.Count)
+                {
+                    record.task = new CreateTask(record.employment, new ItemStack(record.employment.building.levels[record.employment.level].createdItem, (int)record.employment.building.levels[record.employment.level].itemsPerSecond));
+                    record.employment.creatingWorkers.Add(record);
+                }
+                else if (record.employment.building.levels[record.employment.level].craftingWorkers > record.employment.craftingWorkers.Count)
+                {
+                    record.task = new CraftingTask(record.employment.building.levels[record.employment.level].output, record.employment.building.levels[record.employment.level].craftingIngredients, record.employment.building.levels[record.employment.level].craftingSpeed, record.employment);
+                    record.employment.craftingWorkers.Add(record);
+                }
+                else if (!neededItems.Values.All(i => i.Count == 0))
+                {
+                    foreach (KeyValuePair<PlacedBuilding, List<ItemStack>> item in neededItems)
+                    {
+                        if (item.Value.Count != 0)
+                        {
+                            Dictionary<PlacedBuilding, int> foundItems;
+                            record.task = new MoveTask(item.Key, record, item.Value[0], out foundItems);
+                            int foundItemCount = foundItems.Values.Sum();
+                            if (foundItemCount == item.Value[0].stackSize)
+                            {
+                                item.Value.RemoveAt(0);
+                            }
+                            else
+                            {
+                                item.Value[0].stackSize -= foundItemCount;
+                            }
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    continue;
+                }
+            }
+
+            if (!record.task.firstPathGenerated)
+            {
+                GeneratePath(record);
+                record.gameObject.SetActive(true);
+                record.task.firstPathGenerated = true;
+            }
+
+            if (record.path != null)
+            {
+                record.Log();
+                if (record.path.Count > 1 && record.currentPointIndex < record.path.Count - 1)
                 {
                     //On path
                     record.segmentPrecentMoved += (record.movementSpeed * Time.deltaTime) / record.trackLegnth / Vector3.Distance(record.path[record.currentPointIndex], record.path[record.currentPointIndex + 1]);
@@ -154,17 +202,9 @@ public class CitizenController : MonoBehaviour
                     //Off path
                     if (record.task.last)
                     {
-                        //Last Building in path
-                        if(record.task.done)
-                        {
-                            //Task is done and ready to be replaced
-                            record.task = null;
-                        }
-                        else
-                        {
                             //Task is not done and needs to wait before going to next building
                             record.gameObject.SetActive(false);
-                        }
+                        
                     }
                     else
                     {
@@ -173,53 +213,29 @@ public class CitizenController : MonoBehaviour
                     }
                 }
             }
-            if (record.task == null)
-            {
-                if(record.employment.building.levels[record.employment.level].createWorkers < record.employment.createingWorkers.Count)
-                {
-                    record.task = new CreateTask(record.employment, new ItemStack(record.employment.building.levels[record.employment.level].createdItem, (int)record.employment.building.levels[record.employment.level].itemsPerSecond));
-                    record.employment.createingWorkers.Add(record);
-                }
-                else if (record.employment.building.levels[record.employment.level].createWorkers < record.employment.craftingWorkers.Count)
-                {
-                    record.task = new CraftingTask(record.employment.building.levels[record.employment.level].output, record.employment.building.levels[record.employment.level].craftingIngredients, record.employment.building.levels[record.employment.level].craftingSpeed, record.employment);
-                    record.employment.craftingWorkers.Add(record);
-                }
-                else if(!neededItems.Values.All(i => i.Count == 0))
-                {
-                    foreach (KeyValuePair<PlacedBuilding, List<ItemStack>> item in neededItems)
-                    {
-                        if(item.Value.Count != 0)
-                        {
-                            record.task = new MoveTask(item.Key, item.Value[0]);
-                            item.Value.RemoveAt(0);
-                            break;
-                        }
-                    }
-                }
-            }
-            if (!record.task.started)
-            {
-                GeneratePath(record);
-                record.gameObject.SetActive(true);
-            }
-            if (record.task is CraftingTask craftingTask && !record.gameObject.activeInHierarchy && !craftingTask.crafting) 
+
+
+            if (record.task is CraftingTask craftingTask && !record.gameObject.activeInHierarchy && !craftingTask.crafting)
             {
                 CraftingTask task = (CraftingTask)record.task;
                 bool hasAllItems = true;
                 foreach (var item in task.inputs)
                 {
-                    if (!record.employment.items.Contains(item))
+                    if (!record.employment.items.Contains(item) || record.employment.items.Find(i => i.Equals(item)).stackSize <= item.stackSize)
                     {
-                        if (!neededItems.ContainsKey(record.employment))
-                            neededItems.Add(record.employment, new List<ItemStack>());
-                        if (neededItems[record.employment].Contains(item))
+                        if (!craftingTask.itemRequested)
                         {
-                            neededItems[record.employment].Find(i => i.Equals(item)).stackSize += item.stackSize;
-                        }
-                        else
-                        {
-                            neededItems[record.employment].Add(new ItemStack(item));
+                            craftingTask.itemRequested = true;
+                            if (!neededItems.ContainsKey(record.employment))
+                                neededItems.Add(record.employment, new List<ItemStack>());
+                            if (neededItems[record.employment].Contains(item))
+                            {
+                                neededItems[record.employment].Find(i => i.Equals(item)).stackSize += item.stackSize;
+                            }
+                            else
+                            {
+                                neededItems[record.employment].Add(new ItemStack(item));
+                            }
                         }
                         hasAllItems = false;
                     }
@@ -228,6 +244,16 @@ public class CitizenController : MonoBehaviour
                     return;
                 StartCoroutine(craftingTask.Craft(record.employment));
             }
+
+            if (record.task is MoveTask moveTask)
+            {
+                if (moveTask.finished == true)
+                {
+                    record.task = null;
+                    record.path = null;
+                }
+            }
+
             if (record.task is CreateTask && !record.gameObject.activeInHierarchy)
             {
                 CreateTask task = (CreateTask)record.task;
@@ -243,7 +269,8 @@ public class CitizenController : MonoBehaviour
         }
     }
 
-    public void GeneratePath(CitizenRecord record) {
+    public void GeneratePath(CitizenRecord record)
+    {
         record.segmentPrecentMoved = 0;
         record.currentPointIndex = 0;
         record.trackLegnth = 0;
@@ -253,7 +280,7 @@ public class CitizenController : MonoBehaviour
         record.path.Clear();
         for (int i = 0; i < newPath.Count; i++)
         {
-            record.path.Add(new Vector3(newPath[i].x, TerrainGen.world[newPath[i]]+heightOffset, newPath[i].y));
+            record.path.Add(new Vector3(newPath[i].x, TerrainGen.world[newPath[i]] + heightOffset, newPath[i].y));
             if (i != 0)
             {
                 record.trackLegnth += Vector3.Distance(record.path[i - 1], record.path[i]);

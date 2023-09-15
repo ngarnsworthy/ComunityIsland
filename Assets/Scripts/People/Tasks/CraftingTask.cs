@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CraftingTask : CitizenTask
@@ -9,8 +8,10 @@ public class CraftingTask : CitizenTask
     public ItemStack[] inputs;
     public float craftingTime;
     public bool crafting;
+    public bool itemRequested = false;
     public IEnumerator Craft(PlacedBuilding building)
     {
+        Debug.Log("Starting Crafting");
         crafting = true;
         foreach (var item in inputs)
         {
@@ -34,6 +35,8 @@ public class CraftingTask : CitizenTask
             building.items.Add(new ItemStack(output));
         }
         crafting = false;
+        itemRequested = false;
+        Debug.Log("Crafting Done");
     }
 
     public CraftingTask(ItemStack output, ItemStack[] inputs, float craftingTime, PlacedBuilding building) : base(building)
@@ -43,11 +46,9 @@ public class CraftingTask : CitizenTask
         this.craftingTime = craftingTime;
     }
 
-    public override string Name => "Crafting "+ output.item.name;
+    public override string Name => "Crafting " + output.item.name;
 
     public override bool last => true;
-
-    public override bool done => false;
 
     public override bool priority => false;
 }

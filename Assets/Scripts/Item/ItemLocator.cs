@@ -13,25 +13,29 @@ public static class ItemLocator
         HashSet<Chunk> allChunks = new HashSet<Chunk>();
         while (remainingItemStack.stackSize != 0)
         {
+            if (chunkQueue.Count <= 0)
+            {
+                return buildings;
+            }
             Chunk chunk = chunkQueue.Dequeue();
             if (allChunks.Count <= 1000)
             {
-                if (!allChunks.Contains(chunk.north))
+                if (!allChunks.Contains(chunk.north) && chunk.north != null)
                 {
                     chunkQueue.Enqueue(chunk.north);
                     allChunks.Add(chunk.north);
                 }
-                if (!allChunks.Contains(chunk.east))
+                if (!allChunks.Contains(chunk.east) && chunk.east != null)
                 {
                     chunkQueue.Enqueue(chunk.east);
                     allChunks.Add(chunk.east);
                 }
-                if (!allChunks.Contains(chunk.south))
+                if (!allChunks.Contains(chunk.south) && chunk.south != null)
                 {
                     chunkQueue.Enqueue(chunk.south);
                     allChunks.Add(chunk.south);
                 }
-                if (!allChunks.Contains(chunk.west))
+                if (!allChunks.Contains(chunk.west) && chunk.west != null)
                 {
                     chunkQueue.Enqueue(chunk.west);
                     allChunks.Add(chunk.west);
@@ -47,6 +51,7 @@ public static class ItemLocator
                     int foundItemCount = building.ReserveIfPosible(remainingItemStack);
                     remainingItemStack.stackSize -= foundItemCount;
                     buildings.Add(building, foundItemCount);
+                    excludedBuildings.Add(building);
                 }
             }
         }

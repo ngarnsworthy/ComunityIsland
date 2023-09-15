@@ -16,9 +16,15 @@ MonoBehaviour:
   - mesh: {fileID: -2432090755550338912, guid: ffa7f31baff18994b8a03339ae354600, type: 3}
     rotation: {x: 90, y: 90, z: 0}
     maxWorkers: 5
-    createsItems: 1
     createdItem: {fileID: 11400000, guid: 9c0f23e4ce2ef1d4a92d9c0ae3f69f7e, type: 2}
     itemsPerSecond: 1
+    createWorkers: 4
+    craftingIngredients: []
+    output:
+      item: {fileID: 0}
+      stackSize: 0
+    craftingSpeed: 0
+    craftingWorkers: 0
   footprint: {x: 4, y: 4}
   doorLocation: {x: 3, y: 0}
   sprite: {fileID: 21300000, guid: fe4d8cce23c2c5840ad9752fffbf0a82, type: 3}

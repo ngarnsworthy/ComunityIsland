@@ -121,13 +121,13 @@ public class World
 
     public void Save()
     {
-        foreach (Chunk item in chunks.Values)
-        {
-            item.Save();
-        }
-        CitizenController.Instance.Save();
-        SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath + "/" + name, this);
-        Debug.Log(Application.persistentDataPath + "/" + name);
+        //foreach (Chunk item in chunks.Values)
+        //{
+        //    item.Save();
+        //}
+        //CitizenController.Instance.Save();
+        //SaveAsBinary.WriteToBinaryFile<World>(Application.persistentDataPath + "/" + name, this);
+        //Debug.Log(Application.persistentDataPath + "/" + name);
     }
 
     public class ChunkLocation

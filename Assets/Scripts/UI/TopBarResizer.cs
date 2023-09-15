@@ -14,7 +14,7 @@ public class TopBarResizer : MonoBehaviour
     private void Awake()
     {
         firstLocation = elements[0].anchoredPosition;
-        if(text)
+        if (text)
             foreach (var item in elements)
             {
                 item.sizeDelta = new Vector2(1000, item.rect.height);
@@ -38,8 +38,7 @@ public class TopBarResizer : MonoBehaviour
                 TextMeshProUGUI text = elements[i].GetComponent<TextMeshProUGUI>();
                 if (text != null)
                 {
-                    sum += spacing+text.renderedWidth;
-                    Debug.Log(text.renderedWidth);
+                    sum += spacing + text.renderedWidth;
                 }
             }
             else

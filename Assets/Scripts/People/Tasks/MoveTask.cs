@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MoveTask : CitizenTask
@@ -11,30 +12,26 @@ public class MoveTask : CitizenTask
     public override bool last => _last;
     bool _last = false;
 
-    public override bool done => true;
 
     public Dictionary<PlacedBuilding, int> buildingData;
     ItemStack itemToGet;
     int count;
-    bool finished = false;
-    public MoveTask(PlacedBuilding building, ItemStack itemToGet) : base(building)
+    public bool finished = false;
+    public MoveTask(PlacedBuilding building, CitizenRecord citizen, ItemStack itemToGet, out Dictionary<PlacedBuilding, int> buildingData) : base(building, citizen)
     {
         this.itemToGet = itemToGet;
+        List<PlacedBuilding> excludedBuildings = new List<PlacedBuilding> { building };
+        this.buildingData = ItemLocator.LocateItem(citizen.gameObject.transform.position, itemToGet, excludedBuildings);
+        buildingData = this.buildingData;
+        itemToGet.stackSize = buildingData.Values.Sum();
     }
 
-    public override PlacedBuilding NextTaskLocation(CitizenRecord citizen)
+    public override PlacedBuilding NextTaskLocation()
     {
-        if (!started)
-        {
-            List<PlacedBuilding> excludedBuildings = new List<PlacedBuilding> { building };
-            buildingData = ItemLocator.LocateItem(citizen.gameObject.transform.position, itemToGet, excludedBuildings);
-            started = true;
-        }
-
         if (finished)
         {
             ItemStack foundItemStack = building.items.Find(i => i.Equals(itemToGet));
-            if(foundItemStack == null)
+            if (foundItemStack == null)
             {
                 building.items.Add(itemToGet);
             }

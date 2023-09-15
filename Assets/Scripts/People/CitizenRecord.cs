@@ -1,4 +1,3 @@
-using Aoiti.Pathfinding;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,11 +13,11 @@ public class CitizenRecord
         {
             if (_nextBuilding == null)
             {
-                _nextBuilding = task.NextTaskLocation(this);
+                _nextBuilding = task.NextTaskLocation();
             }
-            else if(path != null && currentPointIndex >= path.Count)
+            else if (path != null && currentPointIndex >= path.Count)
             {
-                _nextBuilding = task.NextTaskLocation(this);
+                _nextBuilding = task.NextTaskLocation();
             }
 
             return _nextBuilding;
@@ -36,7 +35,7 @@ public class CitizenRecord
     {
         get
         {
-            if(_rigidbody == null)
+            if (_rigidbody == null)
             {
                 _rigidbody = gameObject.GetComponent<Rigidbody>();
             }
@@ -51,6 +50,11 @@ public class CitizenRecord
     public float movementSpeed => 50;
     public int currentPointIndex;
     public float trackLegnth;
+
+    public void Log()
+    {
+        Debug.Log("Employment: " + employment.building.name + " Task: " + task.Name + " Path: "+ string.Join(",", path));
+    }
 
     public override bool Equals(object obj)
     {

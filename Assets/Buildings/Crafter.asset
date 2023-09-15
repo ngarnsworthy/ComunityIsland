@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Crafter
   m_EditorClassIdentifier: 
   levels:
-  - mesh: {fileID: -5495902117074765545, guid: 9932b37c3ec33c143a0634e9a256050a, type: 3}
+  - mesh: {fileID: 4887216478360415443, guid: b4ab0a191fba9234190249737a02619b, type: 3}
     rotation: {x: 0, y: 0, z: 0}
-    maxWorkers: 0
-    createsItems: 0
-    createdItem: {fileID: 0}
-    itemsPerSecond: 0
-    createVSCraftingWorkers: 1
+    maxWorkers: 10
+    createdItem: {fileID: 11400000, guid: 9c0f23e4ce2ef1d4a92d9c0ae3f69f7e, type: 2}
+    itemsPerSecond: 1
+    createWorkers: 0
     craftingIngredients:
     - item: {fileID: 11400000, guid: 9c0f23e4ce2ef1d4a92d9c0ae3f69f7e, type: 2}
       stackSize: 9
@@ -27,6 +26,7 @@ MonoBehaviour:
       item: {fileID: 11400000, guid: 69e8e155f41e3b24eaef3565ae00484a, type: 2}
       stackSize: 1
     craftingSpeed: 1
-  footprint: {x: 1, y: 1}
-  doorLocation: {x: 0, y: 0}
+    craftingWorkers: 4
+  footprint: {x: 2, y: 2}
+  doorLocation: {x: 3, y: 3}
   sprite: {fileID: 21300000, guid: f09eae8c0ea04254b90c5386a034a225, type: 3}

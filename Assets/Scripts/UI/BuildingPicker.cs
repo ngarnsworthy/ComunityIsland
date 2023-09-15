@@ -44,7 +44,7 @@ public class BuildingPicker : MonoBehaviour
 
     private void Update()
     {
-        buildingPickerSlotIndex += (int)changeSelection.action.ReadValue<float>();
+        buildingPickerSlotIndex += (int)Mathf.Clamp(changeSelection.action.ReadValue<float>(), -1, 1);
 
         if (buildingPickerSlotIndex < 0)
         {
@@ -53,9 +53,19 @@ public class BuildingPicker : MonoBehaviour
 
         if (buildingPickerSlotIndex > buildingPickerSlots.Count - 1)
         {
-            buildingPickerSlotIndex %= buildingPickerSlots.Count - 1;
+            buildingPickerSlotIndex %= buildingPickerSlots.Count;
         }
 
+        Debug.Log(buildingPickerSlotIndex);
+
+        if (changeSelection.action.ReadValue<float>() != 0)
+        {
+            foreach (var item in buildingPickerSlots)
+            {
+                item.transform.GetChild(0).GetComponent<Image>().color = Color.white;
+            }
+            buildingPickerSlots[buildingPickerSlotIndex].transform.GetChild(0).GetComponent<Image>().color = Color.gray;
+        }
         buildingPlacer.placedBuilding = buildings[buildingPickerSlotIndex];
     }
 }

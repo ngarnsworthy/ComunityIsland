@@ -13,7 +13,7 @@ public class TaskInfo : MonoBehaviour
     {
         taskType.text = "Task type: " + task.Name;
         buildingsToVisit.text = "";
-        if(task is MoveTask moveTask)
+        if (task is MoveTask moveTask)
         {
             buildingsToVisit.text = "Buildings To Visit: ";
             foreach (PlacedBuilding building in moveTask.buildingData.Keys)

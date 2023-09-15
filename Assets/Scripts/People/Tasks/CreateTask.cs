@@ -10,11 +10,9 @@ public class CreateTask : CitizenTask
         this.createdItem = createdItem;
     }
 
-    public override string Name => "Createing "+createdItem.item.name;
+    public override string Name => "Createing " + createdItem.item.name;
 
     public override bool priority => false;
 
     public override bool last => true;
-
-    public override bool done => false;
 }
