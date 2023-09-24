@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CraftingTask : CitizenTask
@@ -48,7 +49,40 @@ public class CraftingTask : CitizenTask
 
     public override string Name => "Crafting " + output.item.name;
 
-    public override bool last => true;
+    public override bool workAtBuilding => true;
 
     public override bool priority => false;
+
+    public override void Update()
+    {
+        if (!crafting)
+        {
+            CraftingTask task = (CraftingTask)citizen.task;
+            bool hasAllItems = true;
+            foreach (var item in task.inputs)
+            {
+                if (!citizen.employment.items.Contains(item) || citizen.employment.items.Find(i => i.Equals(item)).stackSize <= item.stackSize)
+                {
+                    hasAllItems = false;
+                    if (!itemRequested)
+                    {
+                        itemRequested = true;
+                        if (!CitizenController.Instance.neededItems.ContainsKey(citizen.employment))
+                            CitizenController.Instance.neededItems.Add(citizen.employment, new List<ItemStack>());
+                        if (CitizenController.Instance.neededItems[citizen.employment].Contains(item))
+                        {
+                            CitizenController.Instance.neededItems[citizen.employment].Find(i => i.Equals(item)).stackSize += item.stackSize;
+                        }
+                        else
+                        {
+                            CitizenController.Instance.neededItems[citizen.employment].Add(new ItemStack(item));
+                        }
+                    }
+                }
+            }
+            if (!hasAllItems)
+                return;
+            CitizenController.Instance.StartCoroutine(Craft(citizen.employment));
+        }
+    }
 }

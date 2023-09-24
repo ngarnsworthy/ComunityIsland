@@ -13,7 +13,7 @@ public abstract class CitizenTask
         protected set;
     }
 
-    public abstract bool last
+    public abstract bool workAtBuilding
     {
         get;
     }
@@ -37,4 +37,6 @@ public abstract class CitizenTask
     }
 
     public virtual PlacedBuilding NextTaskLocation() { return building; }
+
+    public virtual void Update() { }
 }

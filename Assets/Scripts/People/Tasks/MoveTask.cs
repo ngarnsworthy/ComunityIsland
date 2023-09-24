@@ -9,14 +9,14 @@ public class MoveTask : CitizenTask
         get { return "Moving items to a building"; }
     }
 
-    public override bool last => _last;
+    public override bool workAtBuilding => _last;
     bool _last = false;
 
 
     public Dictionary<PlacedBuilding, int> buildingData;
     ItemStack itemToGet;
     int count;
-    public bool finished = false;
+    KeyValuePair<PlacedBuilding, int> lastbuilding;
     public MoveTask(PlacedBuilding building, CitizenRecord citizen, ItemStack itemToGet, out Dictionary<PlacedBuilding, int> buildingData) : base(building, citizen)
     {
         this.itemToGet = itemToGet;
@@ -28,52 +28,39 @@ public class MoveTask : CitizenTask
 
     public override PlacedBuilding NextTaskLocation()
     {
-        if (finished)
+        if(lastbuilding.Key != null)
         {
-            ItemStack foundItemStack = building.items.Find(i => i.Equals(itemToGet));
-            if (foundItemStack == null)
+            buildingData.Remove(lastbuilding.Key);
+            ItemStack foundItemStack = lastbuilding.Key.reservedItems.Find(i => i.Equals(itemToGet));
+            foundItemStack.stackSize -= lastbuilding.Value;
+
+            if (foundItemStack.stackSize == 0)
             {
-                building.items.Add(itemToGet);
+                lastbuilding.Key.reservedItems.Remove(foundItemStack);
             }
-            else
-            {
-                foundItemStack.stackSize += count;
-            }
-            return building;
         }
-        else if (buildingData.Count == 0)
-        {
-            finished = true;
-            return building;
-        }
-        else
+
+        if (buildingData.Count > 0)
         {
             float minDistance = float.PositiveInfinity;
-            PlacedBuilding closestBuilding = null;
-            PlacedBuilding lastBuilding = null;
-            foreach (var building in buildingData.Keys)
+            KeyValuePair<PlacedBuilding, int> closestBuilding;
+            foreach (KeyValuePair<PlacedBuilding, int> building in buildingData)
             {
-                float distance = Vector3.Distance(building.gameObject.transform.position, citizen.gameObject.transform.position);
-                if (distance < minDistance)
+                float distace = Vector3.Distance(building.Key.gameObject.transform.position, citizen.gameObject.transform.position);
+                if (distace < minDistance)
                 {
-                    minDistance = distance;
-                    lastBuilding = building;
-                    closestBuilding = lastBuilding;
+                    minDistance = distace;
+                    closestBuilding = building;
                 }
             }
 
-            ItemStack lastBuildingItemStack = lastBuilding.reservedItems.Find(i => i.Equals(itemToGet));
-            if (lastBuildingItemStack.stackSize == buildingData[lastBuilding])
-            {
-                lastBuilding.reservedItems.Remove(lastBuildingItemStack);
-            }
-            else
-            {
-                lastBuildingItemStack.stackSize -= buildingData[lastBuilding];
-            }
-
-            buildingData.Remove(lastBuilding);
-            return closestBuilding;
+            lastbuilding = closestBuilding;
+            return closestBuilding.Key;
+        }
+        else
+        {
+            lastbuilding = new KeyValuePair<PlacedBuilding, int>(building, (int)-itemToGet.stackSize);
+            return building;
         }
     }
 }
