@@ -14,7 +14,7 @@ public class TerrainGeneration
 
     private GenerationType generationType;
     private int chunkSize;
-    public static FastNoise noise = new FastNoise((int)(UnityEngine.Random.value*int.MaxValue));
+    private static FastNoise noise = new FastNoise((int)(UnityEngine.Random.value*int.MaxValue));
     public TerrainGeneration(int chunkSize, GenerationType generationType)
     {
         if (chunkSize <= 0)
