@@ -3,8 +3,8 @@ name: Unity Test&Build
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: Build my project ✨
+  tests:
+    name: Test Comunity Island
     runs-on: ubuntu-latest
     steps:
       # Checkout
@@ -28,6 +28,24 @@ jobs:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+  build:
+    needs: [tests]
+    name: Build Comunity Island
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          lfs: true
+
+      # Cache
+      - uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
 
       # Build
       - name: Build project
