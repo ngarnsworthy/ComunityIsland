@@ -2,9 +2,9 @@
     "name": "MapTests",
     "rootNamespace": "",
     "references": [
-        "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner",
-        "Map"
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:d43b45f2376c43847ab6b721af1d2730"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
