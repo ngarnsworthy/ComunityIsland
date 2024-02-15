@@ -5,9 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Testing.unity
+    guid: 6c198801abd9c5b468ba352bc6d8c796
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 918340fc9ebbf48a5942251d1cd59ab0,
       type: 2}
@@ -15,3 +15,4 @@ EditorBuildSettings:
       guid: c0a313bfb4286cb4881859ebbc86d9e6, type: 2}
     com.unity.input.settings: {fileID: 11400000, guid: 9e7be553448fa2546aea5752021cbcf7,
       type: 2}
+  m_UseUCBPForAssetBundles: 0
