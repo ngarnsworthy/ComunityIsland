@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using System;
+using UnityEngine;
 
 public class TerrainGeneration
 {
@@ -14,7 +12,7 @@ public class TerrainGeneration
 
     private GenerationType generationType;
     private int chunkSize;
-    private static FastNoise noise = new FastNoise((int)(UnityEngine.Random.value*int.MaxValue));
+    private static FastNoise noise = new FastNoise((int)(UnityEngine.Random.value * int.MaxValue));
     public TerrainGeneration(int chunkSize, GenerationType generationType)
     {
         if (chunkSize <= 0)
@@ -31,16 +29,16 @@ public class TerrainGeneration
         float[,] data = new float[chunkSize, chunkSize];
         for (int x = 0; x < chunkSize; x++)
         {
-            for(int y = 0; y < chunkSize; y++)
+            for (int y = 0; y < chunkSize; y++)
             {
-                switch(generationType)
+                switch (generationType)
                 {
                     case GenerationType.Perlin:
-                        data[x,y]=noise.GetPerlin(((float)x)/chunkSize+location.x, ((float)y)/chunkSize+location.y); break;
+                        data[x, y] = noise.GetPerlin(((float)x) / chunkSize + location.x, ((float)y) / chunkSize + location.y) * 100; break;
                     case GenerationType.Fractal:
-                        data[x,y]=noise.GetPerlinFractal(((float)x) / chunkSize + location.x, ((float)y) / chunkSize + location.y); break;
+                        data[x, y] = noise.GetPerlinFractal(((float)x) / chunkSize + location.x, ((float)y) / chunkSize + location.y) * 100; break;
                     case GenerationType.Simplex:
-                        data[x,y]=noise.GetSimplex(((float)x) / chunkSize + location.x, ((float)y) / chunkSize + location.y); break;
+                        data[x, y] = noise.GetSimplex(((float)x) / chunkSize + location.x, ((float)y) / chunkSize + location.y) * 100; break;
                 }
             }
         }

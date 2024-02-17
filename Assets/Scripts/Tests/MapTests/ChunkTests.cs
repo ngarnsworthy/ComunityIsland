@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
+using System;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 public class ChunkTests
 {
@@ -12,7 +9,7 @@ public class ChunkTests
     {
         int chunkSize = 16;
 
-        Chunk chunk = new Chunk(chunkSize, new Vector2Int(0,0));
+        Chunk chunk = new Chunk(chunkSize, new Vector2Int(0, 0));
 
         Assert.NotNull(chunk.data);
 
@@ -20,7 +17,7 @@ public class ChunkTests
         Assert.AreEqual(chunkSize, chunk.data.GetLength(1));
 
         TerrainGeneration terrainGeneration = new TerrainGeneration(chunkSize, TerrainGeneration.GenerationType.Perlin);
-        chunk = new Chunk(chunkSize, new Vector2Int(0,0), terrainGeneration);
+        chunk = new Chunk(chunkSize, new Vector2Int(0, 0), terrainGeneration);
 
         Assert.NotNull(chunk.data);
 
@@ -31,14 +28,14 @@ public class ChunkTests
     }
 
     [Test]
-    public void TestConstructorInputValidation() 
+    public void TestConstructorInputValidation()
     {
-        Assert.That(() => new Chunk(0, new Vector2Int(0,0)),
+        Assert.That(() => new Chunk(0, new Vector2Int(0, 0)),
                   Throws.TypeOf<ArgumentOutOfRangeException>());
 
         Assert.That(() => new Chunk(-10, new Vector2Int(0, 0)),
           Throws.TypeOf<ArgumentOutOfRangeException>());
 
-        new Chunk(10, new Vector2Int(0,0));
+        new Chunk(10, new Vector2Int(0, 0));
     }
 }

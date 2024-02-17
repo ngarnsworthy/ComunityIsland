@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
+using System;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 public class GenerationTest
 {
@@ -13,7 +10,7 @@ public class GenerationTest
         foreach (TerrainGeneration.GenerationType type in (TerrainGeneration.GenerationType[])Enum.GetValues(typeof(TerrainGeneration.GenerationType)))
         {
             Debug.Log("");
-            Debug.Log("Type: "+type);
+            Debug.Log("Type: " + type);
 
             TerrainGeneration terrainGeneration = new TerrainGeneration(16, type);
 
@@ -31,7 +28,7 @@ public class GenerationTest
 
                 for (int y = 0; y < data.GetLength(1); y++)
                 {
-                    row += data[x, y]+"|";
+                    row += data[x, y] + "|";
                 }
 
                 Debug.Log(row);
