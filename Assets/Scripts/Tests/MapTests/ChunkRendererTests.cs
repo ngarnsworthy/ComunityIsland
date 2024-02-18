@@ -32,11 +32,9 @@ public class ChunkRendererTests
     [Test]
     public void TestInputValidation()
     {
-        ChunkRenderer renderer = new ChunkRenderer();
+        Assert.That(() => ChunkRenderer.GetMesh(null),
+                  Throws.TypeOf<ArgumentNullException>());
 
-        Mesh mesh;
-
-        Assert.That(() => new Chunk(0, new Vector2Int(0, 0)),
-                  Throws.TypeOf<ArgumentOutOfRangeException>());
+        ChunkRenderer.GetMesh(new float[100,100]);
     }
 }

@@ -1,3 +1,4 @@
+using Codice.CM.Client.Differences.Merge;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -29,8 +30,6 @@ public class ChunkRenderer
             for (int y = 0; y < size.y - 1; y++)
             {
                 tris.AddRange(GetTris(x, y, size.y));
-
-                //Debug.Log($"X: {x} Y: {y} Data: {string.Join("|", GetTris(x, y, data.GetLength(0)))}");
             }
         }
 
